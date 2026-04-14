@@ -6,135 +6,138 @@
 <title>Chicago ADU Financial Calculator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F7F5F0;--surface:#FFFFFF;--surface2:#F0EDE6;--border:#D8D4CB;--text:#1A1714;--text2:#5A5248;--text3:#8A8078;--accent:#2D5A27;--accent-light:#E8F2E6;--accent-mid:#4A8F42;--warn:#7A4F1A;--warn-light:#FDF3E6;--danger:#7A1A1A;--danger-light:#FDE6E6;--info:#1A3A5A;--info-light:#E6EFF8;--gold:#C4922A;--gold-light:#FDF6E6;--radius:6px;--radius-lg:12px}
+:root{--bg:#F7F5F0;--sf:#FFFFFF;--sf2:#F0EDE6;--bd:#D8D4CB;--tx:#1A1714;--tx2:#5A5248;--tx3:#8A8078;--ac:#2D5A27;--acl:#E8F2E6;--acm:#4A8F42;--wa:#7A4F1A;--wal:#FDF3E6;--da:#7A1A1A;--inl:#E6EFF8;--info:#1A3A5A;--gd:#C4922A;--gdl:#FDF6E6;--r:6px;--rl:12px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh}
-.page-header{background:var(--text);color:#F7F5F0;padding:1.75rem 2.5rem;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
-.page-header h1{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;line-height:1.1}
-.page-header h1 em{font-style:italic;color:#A8C89F}
-.header-sub{font-size:11px;color:#A09890;margin-top:.4rem;font-family:'DM Mono',monospace;letter-spacing:.04em}
-.nav-tabs{display:flex;gap:4px;flex-shrink:0;align-items:center}
-.nav-btn{font-family:'Instrument Sans',sans-serif;font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid #4A4240;background:transparent;color:#A09890;cursor:pointer;transition:all .15s}
-.nav-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.container{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
-.plabel{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.plabel::after{content:'';flex:1;height:1px;background:var(--border)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
-@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}}
-.field label{display:block;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
-.field label .val{color:var(--text2);font-weight:500;float:right}
-select,input[type=number],input[type=text]{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2);color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:14px;appearance:none}
-select:focus,input:focus{outline:none;border-color:var(--accent-mid)}
-input[type=range]{width:100%;margin-top:4px;accent-color:var(--accent);cursor:pointer}
-.tabs{display:flex;gap:4px;margin-bottom:1rem;flex-wrap:wrap}
-.tab{font-family:'Instrument Sans',sans-serif;font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
-.tab.active{background:var(--text);border-color:var(--text);color:var(--bg)}
-.infobox{background:var(--info-light);border:1px solid #B0C8E0;border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--info);margin-top:.75rem;line-height:1.6}
-.warnbox{background:var(--warn-light);border:1px solid #E0C890;border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--warn);margin-top:.75rem;line-height:1.6}
-.successbox{background:var(--accent-light);border:1px solid #B0D0AB;border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--accent);margin-top:.75rem;line-height:1.6}
-.infobox a,.warnbox a,.successbox a{color:inherit;font-weight:500}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:1rem}
-.metric{background:var(--surface2);border-radius:var(--radius);padding:.9rem 1rem}
-.metric .mlabel{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
-.metric .mval{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;color:var(--text);line-height:1.1}
-.metric .mval.pos{color:var(--accent)}.metric .mval.neg{color:var(--danger)}.metric .mval.warn{color:var(--warn)}
-.metric .msub{font-size:11px;color:var(--text3);margin-top:3px;font-family:'DM Mono',monospace}
-.brow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)}
-.brow:last-child{border:none;font-family:'DM Serif Display',serif;font-size:17px;padding-top:8px;margin-top:2px}
-.brow .bl{color:var(--text2)}
-.ami-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.ami-label{width:85px;text-align:right;color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;flex-shrink:0}
-.ami-track{flex:1;background:var(--surface2);border-radius:4px;height:24px;overflow:hidden;position:relative}
-.ami-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;transition:width .4s ease}
-.ami-note{width:75px;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;flex-shrink:0}
-.zip-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:.75rem;flex-wrap:wrap}
-.zip-input{flex:0 0 130px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2);color:var(--text);font-family:'DM Mono',monospace;font-size:16px;letter-spacing:.1em}
-.fmr-badge{display:inline-flex;gap:8px;flex-wrap:wrap;margin-top:.5rem}
-.fmr-pill{background:var(--gold-light);border:1px solid #E0C870;border-radius:20px;padding:3px 10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--warn)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px}
-.toggle-label{font-size:12px;color:var(--text2)}
-.pill-group{display:flex;gap:4px}
-.pill{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'Instrument Sans',sans-serif}
-.pill.sel{background:var(--text);border-color:var(--text);color:#fff}
-.data-note{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:.5rem}
-.data-note strong{color:var(--gold)}
-.rlink{font-size:12px;color:var(--info);text-decoration:none;padding:6px 10px;background:var(--info-light);border-radius:var(--radius);display:block;transition:background .15s}
-.rlink:hover{background:#C8DCF0}
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.hidden{display:none!important}
-hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
-.scenario-box{border:1px solid var(--border);border-radius:var(--radius);padding:1rem;background:var(--surface2);margin-top:.75rem}
-.sc-title{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
-/* Sources/Uses chart */
-.su-chart{margin:1rem 0}
-.su-col-label{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;text-align:center}
-.su-stack{display:flex;flex-direction:column;gap:2px;height:160px;border-radius:var(--radius);overflow:hidden}
-.su-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;color:#fff;transition:height .4s ease;min-height:20px}
-.su-leg{display:flex;flex-wrap:wrap;gap:8px;margin-top:.5rem}
-.su-swatch{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text2)}
-.su-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-/* Assumptions page */
-.assm-section{margin-bottom:1.5rem}
-.assm-title{font-size:13px;font-weight:500;margin-bottom:.5rem;color:var(--text)}
-.assm-table{width:100%;font-size:12px;border-collapse:collapse;margin-bottom:.5rem}
-.assm-table th{text-align:left;padding:5px 8px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-weight:400}
-.assm-table td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text2)}
-.assm-table tr:last-child td{border:none}
-.assm-table td:first-child{color:var(--text);font-weight:500}
-.src-badge{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:1px 6px;color:var(--text3);margin-left:4px}
-.massing-box{background:var(--gold-light);border:1px solid #E0C870;border-radius:var(--radius);padding:1rem 1.25rem;margin-top:.75rem}
-.massing-title{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.08em;color:var(--warn);text-transform:uppercase;margin-bottom:.5rem}
-.massing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.massing-item .mi-label{font-size:10px;font-family:'DM Mono',monospace;color:var(--warn);opacity:.8;text-transform:uppercase;letter-spacing:.06em}
-.massing-item .mi-val{font-family:'DM Serif Display',serif;font-size:20px;color:var(--warn)}
-.massing-item .mi-note{font-size:11px;color:var(--warn);opacity:.75}
-.policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh}
+.hdr{background:var(--tx);color:#F7F5F0;padding:1.5rem 2rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.hdr h1{font-family:'DM Serif Display',serif;font-size:1.9rem;font-weight:400;line-height:1.1}
+.hdr h1 em{font-style:italic;color:#A8C89F}
+.hdr-sub{font-size:11px;color:#A09890;margin-top:.35rem;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.nav{display:flex;gap:4px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.nb{font-family:'Instrument Sans',sans-serif;font-size:12px;padding:5px 13px;border-radius:20px;border:1px solid #4A4240;background:transparent;color:#A09890;cursor:pointer;transition:all .15s}
+.nb.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:1.25rem 1.25rem 4rem}
+.pnl{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:1.4rem;margin-bottom:.9rem}
+.plbl{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;color:var(--tx3);text-transform:uppercase;margin-bottom:.9rem;display:flex;align-items:center;gap:8px}
+.plbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}.hdr{flex-direction:column;align-items:flex-start}}
+.fld label{display:block;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;color:var(--tx3);text-transform:uppercase;margin-bottom:4px}
+.fld label .v{color:var(--tx2);font-weight:500;float:right}
+select,input[type=number],input[type=text]{width:100%;padding:7px 9px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf2);color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:14px;appearance:none}
+select:focus,input:focus{outline:none;border-color:var(--acm)}
+input[type=range]{width:100%;margin-top:4px;accent-color:var(--ac);cursor:pointer}
+.tabs{display:flex;gap:4px;margin-bottom:.9rem;flex-wrap:wrap}
+.tab{font-family:'Instrument Sans',sans-serif;font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s}
+.tab.on{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+.ibox{background:var(--inl);border:1px solid #B0C8E0;border-radius:var(--r);padding:9px 11px;font-size:12px;color:var(--info);margin-top:.65rem;line-height:1.6}
+.wbox{background:var(--wal);border:1px solid #E0C890;border-radius:var(--r);padding:9px 11px;font-size:12px;color:var(--wa);margin-top:.65rem;line-height:1.6}
+.gbox{background:var(--acl);border:1px solid #B0D0AB;border-radius:var(--r);padding:9px 11px;font-size:12px;color:var(--ac);margin-top:.65rem;line-height:1.6}
+.ibox a,.wbox a,.gbox a{color:inherit;font-weight:500}
+.mets{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:9px;margin-bottom:.9rem}
+.met{background:var(--sf2);border-radius:var(--r);padding:.85rem .95rem}
+.met .ml{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.08em;color:var(--tx3);text-transform:uppercase;margin-bottom:3px}
+.met .mv{font-family:'DM Serif Display',serif;font-size:23px;font-weight:400;color:var(--tx);line-height:1.1}
+.met .mv.pos{color:var(--ac)}.met .mv.neg{color:var(--da)}.met .mv.warn{color:var(--wa)}
+.met .ms{font-size:11px;color:var(--tx3);margin-top:2px;font-family:'DM Mono',monospace}
+.brow{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--bd)}
+.brow:last-child{border:none;font-family:'DM Serif Display',serif;font-size:16px;padding-top:7px;margin-top:2px}
+.brow .bl{color:var(--tx2)}
+.amilbl{width:85px;text-align:right;color:var(--tx2);font-family:'DM Mono',monospace;font-size:11px;flex-shrink:0}
+.amirow{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.amitrk{flex:1;background:var(--sf2);border-radius:4px;height:23px;overflow:hidden}
+.amifil{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:7px;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;transition:width .4s}
+.aminote{width:80px;font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;flex-shrink:0}
+.ziprow{display:flex;gap:9px;align-items:flex-end;margin-bottom:.65rem;flex-wrap:wrap}
+.zipinp{flex:0 0 120px;padding:7px 9px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf2);color:var(--tx);font-family:'DM Mono',monospace;font-size:16px;letter-spacing:.1em}
+.fmrpills{display:flex;gap:6px;flex-wrap:wrap;margin-top:.4rem}
+.fpil{background:var(--gdl);border:1px solid #E0C870;border-radius:20px;padding:2px 9px;font-size:11px;font-family:'DM Mono',monospace;color:var(--wa)}
+.mktpil{background:var(--acl);border:1px solid #B0D0AB;border-radius:20px;padding:2px 9px;font-size:11px;font-family:'DM Mono',monospace;color:var(--ac)}
+.togrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;flex-wrap:wrap;gap:7px}
+.toglbl{font-size:12px;color:var(--tx2)}
+.pgrp{display:flex;gap:4px}
+.pil{font-size:12px;padding:3px 11px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;font-family:'Instrument Sans',sans-serif}
+.pil.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.dnote{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:.4rem}
+.dnote strong{color:var(--gd)}
+.rl{font-size:12px;color:var(--info);text-decoration:none;padding:5px 9px;background:var(--inl);border-radius:var(--r);display:block;transition:background .15s}
+.rl:hover{background:#C8DCF0}
+.rgrd{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.gone{display:none!important}
+hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
+.scbox{border:1px solid var(--bd);border-radius:var(--r);padding:.9rem;background:var(--sf2);margin-top:.65rem}
+.sct{font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem}
+/* Sources/Uses */
+.su-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0}
+.su-col-lbl{font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;text-align:center}
+.su-stk{display:flex;flex-direction:column-reverse;height:150px;border-radius:var(--r);overflow:hidden;gap:2px}
+.su-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;color:#fff;transition:height .4s;min-height:16px;cursor:default}
+.su-leg{display:flex;flex-wrap:wrap;gap:7px;margin-top:.4rem}
+.su-sw{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:'DM Mono',monospace;color:var(--tx2)}
+.su-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+/* Massing */
+.masbox{background:var(--gdl);border:1px solid #E0C870;border-radius:var(--r);padding:.9rem 1.1rem;margin-top:.65rem}
+.mastit{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.08em;color:var(--wa);text-transform:uppercase;margin-bottom:.5rem}
+.masgrd{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.masit .mill{font-size:10px;font-family:'DM Mono',monospace;color:var(--wa);opacity:.8;text-transform:uppercase;letter-spacing:.06em}
+.masit .mivl{font-family:'DM Serif Display',serif;font-size:19px;color:var(--wa)}
+.masit .mint{font-size:11px;color:var(--wa);opacity:.8;margin-top:1px}
+/* Policy */
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.bar-label{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);width:145px;flex-shrink:0;text-align:right}
-.bar-track{flex:1;background:var(--surface2);border-radius:3px;height:18px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-right:6px;justify-content:flex-end;transition:width .4s ease}
-.bar-fill span{font-size:10px;font-family:'DM Mono',monospace;color:#fff}
-.bar-val{width:80px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text2)}
-.tool-footer{text-align:center;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;padding-top:2rem;border-top:1px solid var(--border);margin-top:2rem}
-.tool-footer a{color:var(--text2)}
+.bar-lbl{font-size:11px;font-family:'DM Mono',monospace;color:var(--tx2);width:145px;flex-shrink:0;text-align:right}
+.bar-trk{flex:1;background:var(--sf2);border-radius:3px;height:18px;overflow:hidden}
+.bar-fil{height:100%;border-radius:3px;display:flex;align-items:center;padding-right:5px;justify-content:flex-end;transition:width .4s}
+.bar-fil span{font-size:10px;font-family:'DM Mono',monospace;color:#fff}
+.bar-val{width:80px;font-size:11px;font-family:'DM Mono',monospace;color:var(--tx2)}
+/* Subsidy gap */
+.sgap-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.sgap-lbl{font-size:11px;font-family:'DM Mono',monospace;color:var(--tx2);width:70px;flex-shrink:0;text-align:right}
+.sgap-bar-wrap{flex:1;background:var(--sf2);border-radius:4px;height:26px;overflow:hidden;position:relative}
+.sgap-bar{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:11px;font-family:'DM Mono',monospace;font-weight:500;color:#fff;transition:width .4s}
+.sgap-note{width:120px;font-size:11px;font-family:'DM Mono',monospace;flex-shrink:0;color:var(--tx2)}
+/* Assumptions */
+.at{width:100%;font-size:12px;border-collapse:collapse;margin-bottom:.5rem}
+.at th{text-align:left;padding:5px 7px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);border-bottom:1px solid var(--bd);font-weight:400}
+.at td{padding:5px 7px;border-bottom:1px solid var(--bd);vertical-align:top;color:var(--tx2)}
+.at tr:last-child td{border:none}
+.at td:first-child{color:var(--tx);font-weight:500}
+.sb{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;background:var(--sf2);border:1px solid var(--bd);border-radius:3px;padding:1px 5px;color:var(--tx3);margin-left:3px}
+.tft{text-align:center;font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;padding-top:1.75rem;border-top:1px solid var(--bd);margin-top:1.75rem}
+.tft a{color:var(--tx2)}
 </style>
 </head>
 <body>
-<header class="page-header">
+<header class="hdr">
   <div>
     <h1>Chicago <em>ADU</em> Financial Calculator</h1>
-    <p class="header-sub">Working draft created by James Yelen, April 2026</p>
+    <p class="hdr-sub">Permanent ADU Ordinance SO2024-0008918 · Effective April 1, 2026</p>
   </div>
-  <div class="nav-tabs">
-    <button class="nav-btn active" id="btnHomeowner" onclick="setMode('homeowner')">Homeowner</button>
-    <button class="nav-btn" id="btnPolicy" onclick="setMode('policy')">Policymaker</button>
-    <button class="nav-btn" id="btnAssumptions" onclick="setMode('assumptions')">Assumptions</button>
+  <div class="nav">
+    <button class="nb on" id="btnHomeowner" onclick="setMode('homeowner')">Homeowner</button>
+    <button class="nb" id="btnPolicy" onclick="setMode('policy')">Policymaker</button>
+    <button class="nb" id="btnAssumptions" onclick="setMode('assumptions')">Assumptions</button>
   </div>
 </header>
 
-<div class="container">
+<div class="wrap">
 
-<!-- ============================================================ HOMEOWNER -->
+<!-- ======================================================= HOMEOWNER -->
 <div id="homeownerMode">
 
-<!-- Section 1: ZIP + FMR -->
-<div class="panel">
-  <div class="plabel">1 — Location &amp; rent benchmark</div>
-  <div class="zip-row">
+<div class="pnl">
+  <div class="plbl">1 — Location &amp; rent data</div>
+  <div class="ziprow">
     <div>
-      <label style="font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;color:var(--text3);text-transform:uppercase;display:block;margin-bottom:5px">Chicago ZIP code</label>
-      <input type="text" class="zip-input" id="zipInput" placeholder="60647" maxlength="5" oninput="lookupZip()">
+      <label style="font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;color:var(--tx3);text-transform:uppercase;display:block;margin-bottom:4px">Chicago ZIP code</label>
+      <input type="text" class="zipinp" id="zipInput" placeholder="60647" maxlength="5" oninput="lookupZip()">
     </div>
     <div style="flex:1">
-      <div id="fmrResult" class="fmr-badge"><span class="fmr-pill">Enter ZIP to load HUD SAFMR data</span></div>
+      <div id="fmrResult" class="fmrpills"><span class="fpil">Enter ZIP to load rent data</span></div>
     </div>
   </div>
   <div class="g2">
-    <div class="field">
-      <label>Bedrooms <span class="val" id="bedsLabel">1-bedroom</span></label>
+    <div class="fld">
+      <label>Bedrooms <span class="v" id="bedsLabel">1-bedroom</span></label>
       <select id="bedrooms" onchange="onBedsChange()">
         <option value="0">Studio</option>
         <option value="1" selected>1 bedroom</option>
@@ -142,19 +145,18 @@ hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
         <option value="3">3 bedrooms</option>
       </select>
     </div>
-    <div class="field">
-      <label>Monthly rent ($) <span class="val" id="rentDisp">$1,600</span></label>
+    <div class="fld">
+      <label>Monthly rent ($) <span class="v" id="rentDisp">$1,600</span></label>
       <input type="range" min="500" max="4000" step="25" value="1600" id="rent" oninput="onRentSlide()">
     </div>
   </div>
-  <div class="data-note" id="rentSourceNote">Enter your ZIP code to load HUD FY2025 Small Area Fair Market Rent (SAFMR) data — the 40th-percentile gross rent benchmark published annually by HUD for Chicago ZIP codes. This is not a subsidy; it's a market data point used in affordability calculations.</div>
+  <div class="dnote" id="rentSourceNote">Enter your ZIP to load HUD FY2025 Small Area FMR (40th-percentile gross rent benchmark) and Rentcast market-rate median for this ZIP. SFAMRs are rent benchmarks published annually by HUD in select geographies, including for Chicago ZIP codes. This is not a subsidy; it's a market data point used in affordability calculations. Accessing Rentcast data requires creating an account and obtaining an API key. Both are loaded automatically when a valid ZIP is entered.</div>
 </div>
 
-<!-- Section 2: Project + Massing -->
-<div class="panel">
-  <div class="plabel">2 — Project basics &amp; site massing</div>
-  <div class="g2" style="margin-bottom:10px">
-    <div class="field">
+<div class="pnl">
+  <div class="plbl">2 — Project basics &amp; site massing</div>
+  <div class="g2" style="margin-bottom:9px">
+    <div class="fld">
       <label>ADU type</label>
       <select id="aduType" onchange="onTypeChange()">
         <option value="basement">Basement / garden conversion</option>
@@ -163,7 +165,7 @@ hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
         <option value="detached" selected>Detached coach house (new construction)</option>
       </select>
     </div>
-    <div class="field">
+    <div class="fld">
       <label>Finish level</label>
       <select id="finish" onchange="calc()">
         <option value="basic">Basic (rental-grade)</option>
@@ -172,25 +174,54 @@ hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
       </select>
     </div>
   </div>
-  <div class="g3" style="margin-bottom:10px">
-    <div class="field">
-      <label>Size (sq ft) <span class="val" id="sqftVal">600</span></label>
-      <input type="range" min="200" max="1200" step="25" value="600" id="sqft" oninput="document.getElementById('sqftVal').textContent=this.value;updateMassing();calc()">
+  <div class="g3" style="margin-bottom:9px">
+    <div class="fld">
+      <label>Unit size (sq ft) <span class="v" id="sqftVal">600</span></label>
+      <input type="range" min="150" max="1200" step="25" value="600" id="sqft" oninput="document.getElementById('sqftVal').textContent=this.value;updateMassing();calc()">
     </div>
-    <div class="field">
-      <label>Lot depth (ft) <span class="val" id="lotDepthVal">125 ft</span></label>
-      <input type="range" min="80" max="200" step="5" value="125" id="lotDepth" oninput="document.getElementById('lotDepthVal').textContent=this.value+' ft';updateMassing()">
+    <div class="fld">
+      <label>Lot depth (ft) <span class="v" id="lotDVal">125 ft</span></label>
+      <input type="range" min="80" max="200" step="5" value="125" id="lotDepth" oninput="document.getElementById('lotDVal').textContent=this.value+' ft';updateMassing()">
     </div>
-    <div class="field">
-      <label>Number of ADUs on property</label>
+    <div class="fld">
+      <label>Lot width (ft) <span class="v" id="lotWVal">25 ft</span></label>
+      <input type="range" min="20" max="60" step="5" value="25" id="lotWidth" oninput="document.getElementById('lotWVal').textContent=this.value+' ft';updateMassing()">
+    </div>
+  </div>
+  <div class="g3" style="margin-bottom:9px">
+    <div class="fld">
+      <label>Existing units on property</label>
+      <select id="existingUnits" onchange="updateMassing();calc()">
+        <option value="1" selected>1 (single-family)</option>
+        <option value="2">2 (two-flat)</option>
+        <option value="3">3 (three-flat)</option>
+        <option value="4">4 units</option>
+        <option value="5">5 units</option>
+        <option value="8">8 units</option>
+        <option value="12">12 units</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>Number of ADUs planned</label>
       <select id="numAdus" onchange="onAduCountChange()">
         <option value="1" selected>1 ADU</option>
-        <option value="2">2 ADUs (affordability req. applies)</option>
+        <option value="2">2 ADUs (affordability req.)</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>Zoning district</label>
+      <select id="zoningDistrict" onchange="updateMassing()">
+        <option value="RS1">RS-1 (single-family)</option>
+        <option value="RS2">RS-2</option>
+        <option value="RS3" selected>RS-3</option>
+        <option value="RT">RT (two-flat / townhouse)</option>
+        <option value="RM">RM (multi-family)</option>
+        <option value="BC">B / C (mixed-use)</option>
       </select>
     </div>
   </div>
-  <div class="g3" style="margin-bottom:10px">
-    <div class="field">
+  <div class="g2">
+    <div class="fld">
       <label>Site conditions</label>
       <select id="site" onchange="calc()">
         <option value="0">Standard / flat lot</option>
@@ -199,409 +230,363 @@ hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
         <option value="40000">Significant structural issues (+$40k)</option>
       </select>
     </div>
-    <div class="field">
+    <div class="fld">
       <label>Utility connection</label>
       <select id="utility" onchange="calc()">
         <option value="8000">Share existing (+$8k)</option>
         <option value="18000" selected>Separate meter — typical (+$18k)</option>
-        <option value="30000">Full new service — complex (+$30k)</option>
+        <option value="30000">Full new service (+$30k)</option>
       </select>
     </div>
-    <div class="field">
-      <label>Soft costs (design, permits)</label>
+  </div>
+  <div class="g2" style="margin-top:9px">
+    <div class="fld">
+      <label>Soft costs <span class="v" id="softDisp">12%</span></label>
       <select id="soft" onchange="calc()">
         <option value="0.08">8% of hard costs</option>
         <option value="0.12" selected>12% — typical</option>
-        <option value="0.18">18% — complex / historic district</option>
+        <option value="0.18">18% — complex / historic</option>
       </select>
     </div>
-  </div>
-  <div class="g2">
-    <div class="field">
-      <label>Hard cost contingency <span class="val" id="contVal">5%</span></label>
+    <div class="fld">
+      <label>Hard cost contingency <span class="v" id="contVal">5%</span></label>
       <input type="range" min="0" max="20" step="1" value="5" id="contingency" oninput="document.getElementById('contVal').textContent=this.value+'%';calc()">
     </div>
-    <div class="field">
-      <label>Existing units on property (for massing/formula)</label>
-      <select id="existingUnits" onchange="updateMassing();calc()">
-        <option value="1" selected>1 (single-family / detached house)</option>
-        <option value="2">2 (two-flat)</option>
-        <option value="3">3 (three-flat)</option>
-        <option value="4">4 units</option>
-        <option value="6">6 units</option>
-        <option value="8">8 units</option>
-        <option value="12">12 units</option>
-      </select>
-    </div>
   </div>
-  <div id="aduTypeNote" class="infobox" style="margin-top:.75rem"></div>
-  <div id="massingBox" class="massing-box">
-    <div class="massing-title">Massing &amp; ordinance limits (per Chicago Municipal Code §17-9-0201-F / §17-9-0131)</div>
-    <div class="massing-grid" id="massingGrid"></div>
-    <p style="font-size:11px;color:var(--warn);opacity:.8;margin-top:.75rem" id="massingNote"></p>
+  <div id="aduTypeNote" class="ibox" style="margin-top:.65rem"></div>
+  <div id="massingBox" class="masbox">
+    <div class="mastit">Massing &amp; ordinance limits (SO2024-0008918, eff. April 1, 2026)</div>
+    <div class="masgrd" id="masGrid"></div>
+    <p style="font-size:11px;color:var(--wa);opacity:.85;margin-top:.65rem" id="masNote"></p>
   </div>
-  <div id="twoAduPanel" class="hidden">
-    <div class="scenario-box" style="margin-top:.75rem">
-      <div class="sc-title">Second ADU — affordability mandate applies</div>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">With 2+ ADUs, 50% of units (rounded down) must be rented at the city-set 60% AMI rate. For 2 ADUs, 1 unit must meet this requirement. This runs with the land and is recorded with the Cook County Recorder of Deeds for 30 years. A $500 registration fee applies. <a href="https://www.chicago.gov/city/en/depts/doh/provdrs/homeowners/svcs/adu-ordinance.html" target="_blank">§2-44-106(d)–(i)</a></p>
+  <div id="twoAduPanel" class="gone">
+    <div class="scbox" style="margin-top:.65rem">
+      <div class="sct">Second ADU — 60% AMI affordability requirement applies</div>
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem">With 2+ ADUs added, 50% of units (rounded down) must be rented at the city-set 60% AMI rate. For 2 ADUs this means 1 unit must be affordable. This covenant runs with the land for <strong>30 years</strong> and is recorded with the Cook County Recorder of Deeds. A $500 registration fee applies (§2-44-106).</p>
       <div class="g3">
-        <div class="field"><label>2nd ADU type</label><select id="aduType2" onchange="calc()"><option value="basement" selected>Basement conversion</option><option value="garage">Garage conversion</option><option value="attached">Addition</option><option value="detached">Coach house</option></select></div>
-        <div class="field"><label>2nd ADU size (sq ft) <span class="val" id="sqft2Val">400</span></label><input type="range" min="150" max="900" step="25" value="400" id="sqft2" oninput="document.getElementById('sqft2Val').textContent=this.value;calc()"></div>
-        <div class="field"><label>Affordable unit</label><select id="affordUnit" onchange="calc()"><option value="2">Unit 2 (at 60% AMI cap)</option><option value="1">Unit 1 (at 60% AMI cap)</option></select></div>
+        <div class="fld"><label>2nd ADU type</label><select id="aduType2" onchange="calc()"><option value="basement" selected>Basement conversion</option><option value="garage">Garage conversion</option><option value="attached">Addition</option><option value="detached">Coach house</option></select></div>
+        <div class="fld"><label>2nd ADU size (sq ft) <span class="v" id="sqft2Val">350</span></label><input type="range" min="150" max="900" step="25" value="350" id="sqft2" oninput="document.getElementById('sqft2Val').textContent=this.value;calc()"></div>
+        <div class="fld"><label>Affordable unit</label><select id="affordUnit" onchange="calc()"><option value="2">Unit 2 (at 60% AMI cap)</option><option value="1">Unit 1 (at 60% AMI cap)</option></select></div>
       </div>
-      <div id="twoAduInfo" class="warnbox" style="margin-top:.5rem"></div>
+      <div id="twoAduInfo" class="wbox" style="margin-top:.5rem"></div>
     </div>
   </div>
 </div>
 
-<!-- Section 3: Financing -->
-<div class="panel">
-  <div class="plabel">3 — Financing</div>
+<div class="pnl">
+  <div class="plbl">3 — Financing</div>
   <div class="tabs" id="finTabs">
-    <button class="tab active" onclick="setFinTab('cash',this)">Cash</button>
+    <button class="tab on" onclick="setFinTab('cash',this)">Cash</button>
     <button class="tab" onclick="setFinTab('heloc',this)">HELOC / home equity</button>
     <button class="tab" onclick="setFinTab('refi',this)">Cash-out refi</button>
     <button class="tab" onclick="setFinTab('construction',this)">Construction loan</button>
   </div>
-  <div id="finPanelCash"><div class="infobox">Paying cash avoids interest entirely and maximizes rental cash flow from day one. Best for homeowners with substantial savings and a low-rate existing mortgage they don't want to disturb. Opportunity cost (the return forgone on that capital) is typically estimated at 4–7% annually and is not reflected in the cash-flow figures shown below.</div></div>
-  <div id="finPanelHeloc" class="hidden">
+  <div id="fpCash"><div class="ibox">Paying cash avoids interest and maximizes day-one cash flow. Best for owners with substantial savings and a low-rate existing mortgage they don't want to disturb. No monthly debt service.</div></div>
+  <div id="fpHeloc" class="gone">
     <div class="g3">
-      <div class="field"><label>Loan amount <span class="val" id="helocAmtV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="helocAmt" oninput="document.getElementById('helocAmtV').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
-      <div class="field"><label>Interest rate <span class="val" id="helocRateV">7.50%</span></label><input type="range" min="5" max="12" step="0.25" value="7.5" id="helocRate" oninput="document.getElementById('helocRateV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
-      <div class="field"><label>Term <span class="val" id="helocTermV">15 yr</span></label><input type="range" min="5" max="30" step="5" value="15" id="helocTerm" oninput="document.getElementById('helocTermV').textContent=this.value+' yr';calc()"></div>
+      <div class="fld"><label>Loan amount <span class="v" id="haV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="helocAmt" oninput="syncLoan('helocAmt','haV');calc()"></div>
+      <div class="fld"><label>Interest rate <span class="v" id="hrV">7.50%</span></label><input type="range" min="5" max="12" step="0.25" value="7.5" id="helocRate" oninput="document.getElementById('hrV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
+      <div class="fld"><label>Term <span class="v" id="htV">15 yr</span></label><input type="range" min="5" max="30" step="5" value="15" id="helocTerm" oninput="document.getElementById('htV').textContent=this.value+' yr';calc()"></div>
     </div>
-    <div class="infobox">HELOCs use your home's equity as collateral. Lenders typically cap combined LTV at 80–85%. <strong>ADU projects are tricky</strong>: the loan must be sized on pre-construction equity since the ADU's added value won't be appraised until after completion. Variable rates are common. <a href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">NHS Chicago ADU resources →</a></div>
+    <div class="ibox">HELOCs use home equity as collateral — lenders typically cap combined LTV at 80–85%. ADU projects are tricky: the loan must be sized on <em>pre-construction</em> equity since the ADU's added value won't be appraised until after completion. Variable rates are common. The loan amount is capped at total project cost.</div>
   </div>
-  <div id="finPanelRefi" class="hidden">
+  <div id="fpRefi" class="gone">
     <div class="g3">
-      <div class="field"><label>Cash-out amount <span class="val" id="refiAmtV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="refiAmt" oninput="document.getElementById('refiAmtV').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
-      <div class="field"><label>New mortgage rate <span class="val" id="refiRateV">7.00%</span></label><input type="range" min="5" max="10" step="0.25" value="7.0" id="refiRate" oninput="document.getElementById('refiRateV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
-      <div class="field"><label>Term <span class="val" id="refiTermV">30 yr</span></label><input type="range" min="15" max="30" step="15" value="30" id="refiTerm" oninput="document.getElementById('refiTermV').textContent=this.value+' yr';calc()"></div>
+      <div class="fld"><label>Cash-out amount <span class="v" id="raV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="refiAmt" oninput="syncLoan('refiAmt','raV');calc()"></div>
+      <div class="fld"><label>New mortgage rate <span class="v" id="rrV">7.00%</span></label><input type="range" min="5" max="10" step="0.25" value="7.0" id="refiRate" oninput="document.getElementById('rrV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
+      <div class="fld"><label>Term <span class="v" id="rtV">30 yr</span></label><input type="range" min="15" max="30" step="15" value="30" id="refiTerm" oninput="document.getElementById('rtV').textContent=this.value+' yr';calc()"></div>
     </div>
-    <div class="warnbox">A cash-out refi replaces your <em>entire</em> existing mortgage at the new rate — so if your current rate is below today's market, you'll pay the higher rate on your full outstanding balance. The "out-of-pocket cash needed" figure below reflects only the gap between your loan amount and total project cost.</div>
+    <div class="wbox">A cash-out refi replaces your <em>entire</em> existing mortgage at the new rate. If your current rate is below today's market, you'll pay the higher rate on your full outstanding balance — not just the ADU portion. The cash-out amount is capped at total project cost.</div>
   </div>
-  <div id="finPanelConstruction" class="hidden">
+  <div id="fpConstruction" class="gone">
     <div class="g3">
-      <div class="field"><label>Loan amount <span class="val" id="conAmtV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="conAmt" oninput="document.getElementById('conAmtV').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
-      <div class="field"><label>Construction rate <span class="val" id="conRateV">8.50%</span></label><input type="range" min="6" max="14" step="0.25" value="8.5" id="conRate" oninput="document.getElementById('conRateV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
-      <div class="field"><label>Permanent loan rate <span class="val" id="conPermV">7.00%</span></label><input type="range" min="5" max="10" step="0.25" value="7.0" id="conPerm" oninput="document.getElementById('conPermV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
+      <div class="fld"><label>Loan amount <span class="v" id="caV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="conAmt" oninput="syncLoan('conAmt','caV');calc()"></div>
+      <div class="fld"><label>Construction rate <span class="v" id="crV">8.50%</span></label><input type="range" min="6" max="14" step="0.25" value="8.5" id="conRate" oninput="document.getElementById('crV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
+      <div class="fld"><label>Permanent loan rate <span class="v" id="cpV">7.00%</span></label><input type="range" min="5" max="10" step="0.25" value="7.0" id="conPerm" oninput="document.getElementById('cpV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
     </div>
-    <div class="infobox">Construction loans are short-term (12–18 months), interest-only during build, then convert to permanent financing. Rates carry a risk premium. ADU-specific lending products are limited in Chicago — few lenders have standardized ADU underwriting as of 2026.</div>
+    <div class="ibox">Construction loans are short-term (12–18 months), interest-only during build, then convert to permanent financing. Rates carry a risk premium. ADU-specific lending products are limited in Chicago. Loan amount is capped at total project cost.</div>
   </div>
   <hr>
-  <div class="toggle-row">
-    <span class="toggle-label">NHS Chicago / City grant</span>
-    <div class="pill-group">
-      <button class="pill" id="grantNo" onclick="setGrant(0,this)">No grant</button>
-      <button class="pill sel" id="grantPart" onclick="setGrant(40000,this)">$40k partial</button>
-      <button class="pill" id="grantFull" onclick="setGrant(75000,this)">$75k max</button>
+  <div class="togrow">
+    <span class="toglbl">NHS Chicago / City grant</span>
+    <div class="pgrp">
+      <button class="pil" id="grantNo" onclick="setGrant(0,this)">No grant</button>
+      <button class="pil on" id="grantPart" onclick="setGrant(40000,this)">$40k partial</button>
+      <button class="pil" id="grantFull" onclick="setGrant(75000,this)">$75k max</button>
     </div>
   </div>
-  <div class="infobox" style="font-size:11px">NHS Chicago offered up to $10k (planning) + $75k (construction, as a 5-year forgivable loan) for income-eligible households. Program is <strong>currently paused</strong> — check <a href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">nhschicago.org</a> for updates. Cook County homeowners may qualify for a <strong>Home Improvement Exemption</strong> to offset property tax increases for up to 4 years (Cook County Assessor's Office applies this automatically from building permits).</div>
+  <div class="ibox" style="font-size:11px">NHS Chicago offered up to $10k (planning) + $75k (construction, 5-year forgivable loan) for income-eligible households. Program is <strong>currently paused</strong> — check <a href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">nhschicago.org</a>. Cook County homeowners may qualify for a <strong>Home Improvement Exemption</strong> deferring tax increases for up to 4 years (auto-applied by Assessor from building permits).</div>
 </div>
 
-<!-- Section 4: Operating -->
-<div class="panel">
-  <div class="plabel">4 — Operating assumptions</div>
+<div class="pnl">
+  <div class="plbl">4 — Operating assumptions</div>
   <div class="g3">
-    <div class="field"><label>Vacancy rate <span class="val" id="vacVal">7%</span></label><input type="range" min="2" max="20" step="1" value="7" id="vacancy" oninput="document.getElementById('vacVal').textContent=this.value+'%';calc()"></div>
-    <div class="field"><label>Maintenance reserve ($/yr) <span class="val" id="maintVal">$2,400</span></label><input type="range" min="600" max="8000" step="200" value="2400" id="maint" oninput="document.getElementById('maintVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
-    <div class="field"><label>Insurance add-on ($/yr) <span class="val" id="insVal">$1,200</span></label><input type="range" min="400" max="4000" step="100" value="1200" id="ins" oninput="document.getElementById('insVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
+    <div class="fld"><label>Vacancy rate <span class="v" id="vacVal">7%</span></label><input type="range" min="2" max="20" step="1" value="7" id="vacancy" oninput="document.getElementById('vacVal').textContent=this.value+'%';calc()"></div>
+    <div class="fld"><label>Maintenance reserve/yr <span class="v" id="maintVal">$2,400</span></label><input type="range" min="600" max="8000" step="200" value="2400" id="maint" oninput="document.getElementById('maintVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
+    <div class="fld"><label>Insurance add-on/yr <span class="v" id="insVal">$1,200</span></label><input type="range" min="400" max="4000" step="100" value="1200" id="ins" oninput="document.getElementById('insVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
   </div>
   <div class="g2">
-    <div class="field"><label>Property tax increase ($/yr) <span class="val" id="taxVal">$3,000</span></label><input type="range" min="500" max="8000" step="250" value="3000" id="tax" oninput="document.getElementById('taxVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
-    <div class="field"><label>Property management</label><select id="mgmt" onchange="calc()"><option value="0" selected>Self-managed (0%)</option><option value="0.08">8% of rent</option><option value="0.10">10% of rent</option></select></div>
+    <div class="fld"><label>Property tax increase/yr <span class="v" id="taxVal">$3,000</span></label><input type="range" min="500" max="8000" step="250" value="3000" id="tax" oninput="document.getElementById('taxVal').textContent='$'+Number(this.value).toLocaleString();calc()"></div>
+    <div class="fld"><label>Property management</label><select id="mgmt" onchange="calc()"><option value="0" selected>Self-managed (0%)</option><option value="0.08">8% of rent</option><option value="0.10">10% of rent</option></select></div>
   </div>
-  <div class="infobox" style="font-size:11px"><strong>Insurance:</strong> Standard homeowner policies do not typically cover ADU rentals. A separate landlord/dwelling policy is needed — an evolving product area for Illinois ADUs. <strong>Property tax:</strong> Adding an ADU may increase assessed value. The Home Improvement Exemption can defer increases for up to 4 years. Property classification may also change (e.g., from single-family to two-flat), affecting your tax tier. <strong>Vacancy:</strong> Chicago pilot ADUs in desirable neighborhoods reported strong occupancy; 5–8% vacancy is a reasonable baseline assumption.</div>
+  <div class="ibox" style="font-size:11px"><strong>Insurance:</strong> Standard homeowner policies typically do not cover ADU rentals — a separate landlord policy is needed. <strong>Property tax:</strong> Adding an ADU may raise assessed value; property classification may also change (e.g. single-family → two-flat). Home Improvement Exemption can defer the increase for up to 4 years. <strong>Short-term rentals prohibited:</strong> ADUs permitted under this ordinance may not be used for Airbnb/VRBO — minimum lease terms apply. Fine: $1,500–$3,000/offense (§17-9-0201-F(17)).</div>
 </div>
 
-<!-- Section 5: Results -->
-<div class="panel">
-  <div class="plabel">5 — Results &amp; feasibility</div>
-  <div class="metrics" id="metricsGrid"></div>
-
-  <!-- Sources & Uses Chart -->
+<div class="pnl">
+  <div class="plbl">5 — Results &amp; feasibility</div>
+  <div class="mets" id="metricsGrid"></div>
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Sources &amp; uses</div>
-  <div class="g2" id="sourcesUsesChart"></div>
-
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">Sources &amp; uses</div>
+  <div class="su-wrap" id="suChart"></div>
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Annual cash flow breakdown</div>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">Annual cash flow breakdown</div>
   <div id="breakdownTable"></div>
-
-  <!-- Two-ADU combined -->
-  <div id="twoAduResults" class="hidden">
+  <div id="twoAduResults" class="gone">
     <hr>
-    <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Two-ADU combined picture</div>
-    <div class="metrics" id="twoAduMetrics"></div>
-    <div id="twoAduBreakdown"></div>
+    <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">Two-ADU combined picture</div>
+    <div class="mets" id="twoAduMets"></div>
+    <div id="twoAduBD"></div>
   </div>
-
-  <!-- AMI -->
   <hr>
   <div class="tabs" id="amiTabs">
-    <button class="tab active" onclick="setAmiTab('forward',this)">What % AMI does this rent represent?</button>
+    <button class="tab on" onclick="setAmiTab('forward',this)">What % AMI does this rent represent?</button>
     <button class="tab" onclick="setAmiTab('reverse',this)">Rents affordable at each AMI level</button>
   </div>
   <div id="amiForward">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem" id="amiForwardDesc"></p>
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem" id="amiFwdDesc"></p>
     <div id="amiForwardBars"></div>
-    <div class="infobox" id="amiForwardNote" style="margin-top:.75rem;font-size:12px"></div>
+    <div class="ibox" id="amiForwardNote" style="margin-top:.65rem;font-size:12px"></div>
   </div>
-  <div id="amiReverse" class="hidden">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem" id="amiReverseDesc"></p>
+  <div id="amiReverse" class="gone">
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem" id="amiRevDesc"></p>
     <div id="amiReverseBars"></div>
-    <div class="infobox" style="font-size:12px;margin-top:.75rem">Affordability = paying no more than 30% of gross income on housing (standard HUD definition). Chicago-Naperville-Joliet Metro 2025 AMI (4-person household) ≈ $115,700. <a href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart →</a></div>
+    <div class="ibox" style="font-size:12px;margin-top:.65rem">Affordability = 30% of gross income on housing. Chicago-Naperville-Joliet Metro 2025 AMI (4-person) ≈ $115,700. <a href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart →</a></div>
   </div>
-
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Resources</div>
-  <div class="rgrid">
-    <a class="rlink" href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago ADU ordinance &amp; pre-certification (DOH)</a>
-    <a class="rlink" href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">NHS Chicago ADU grant program</a>
-    <a class="rlink" href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart</a>
-    <a class="rlink" href="https://gisapps.chicago.gov/ZoningMapWeb/" target="_blank">Chicago zoning map</a>
-    <a class="rlink" href="https://www.cookcountyassessoril.gov" target="_blank">Cook County Assessor — tax exemptions</a>
-    <a class="rlink" href="https://chicagocityscape.com/address.php?src=adu_ahil" target="_blank">Chicago Cityscape — property ADU eligibility</a>
-    <a class="rlink" href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD Small Area FMR documentation</a>
-    <a class="rlink" href="https://www.assemblyserviceil.com/chicago-coach-house-conversion-cost.html" target="_blank">Assembly Service — coach house cost guide 2026</a>
+  <div class="rgrd">
+    <a class="rl" href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago ADU ordinance &amp; DOH pre-certification</a>
+    <a class="rl" href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">NHS Chicago ADU grant program</a>
+    <a class="rl" href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart</a>
+    <a class="rl" href="https://chicagocityscape.com/address.php?src=adu_ahil" target="_blank">Chicago Cityscape — property eligibility lookup</a>
+    <a class="rl" href="https://www.cookcountyassessoril.gov" target="_blank">Cook County Assessor — tax exemptions</a>
+    <a class="rl" href="https://www.assemblyserviceil.com/chicago-coach-house-conversion-cost.html" target="_blank">Assembly Service IL — coach house cost guide 2026</a>
   </div>
 </div>
 </div><!-- end homeownerMode -->
 
-<!-- ============================================================ POLICY -->
-<div id="policyMode" class="hidden">
-<div class="panel">
-  <div class="plabel">Neighborhood &amp; citywide impact explorer</div>
-  <p style="font-size:14px;color:var(--text2);margin-bottom:1.25rem">Model ADU development impact across Chicago neighborhoods. Adjust citywide assumptions to understand aggregate housing supply and affordability outcomes under the permanent ordinance.</p>
-  <div class="g3" style="margin-bottom:1rem">
-    <div class="field"><label>ADU type modeled</label><select id="polAduType" onchange="policyCalc()"><option value="basement">Basement conversion</option><option value="detached" selected>Coach house (detached)</option><option value="garage">Garage conversion</option><option value="attached">Addition</option></select></div>
-    <div class="field"><label>Finish level</label><select id="polFinish" onchange="policyCalc()"><option value="basic">Basic</option><option value="mid" selected>Mid-range</option><option value="high">High-end</option></select></div>
-    <div class="field"><label>Typical unit size (sq ft) <span class="val" id="polSqftVal">600</span></label><input type="range" min="300" max="700" step="25" value="600" id="polSqft" oninput="document.getElementById('polSqftVal').textContent=this.value;policyCalc()"></div>
+<!-- ======================================================= POLICY -->
+<div id="policyMode" class="gone">
+<div class="pnl">
+  <div class="plbl">Neighborhood &amp; citywide impact explorer</div>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:1.1rem">Model ADU development impact under the permanent ordinance (SO2024-0008918, eff. April 1, 2026).</p>
+  <div class="g3" style="margin-bottom:.9rem">
+    <div class="fld"><label>ADU type modeled</label><select id="polAduType" onchange="policyCalc()"><option value="basement">Basement conversion</option><option value="detached" selected>Coach house (detached)</option><option value="garage">Garage conversion</option></select></div>
+    <div class="fld"><label>Finish level</label><select id="polFinish" onchange="policyCalc()"><option value="basic">Basic</option><option value="mid" selected>Mid-range</option><option value="high">High-end</option></select></div>
+    <div class="fld"><label>Typical unit size (sq ft) <span class="v" id="polSqV">550</span></label><input type="range" min="300" max="700" step="25" value="550" id="polSqft" oninput="document.getElementById('polSqV').textContent=this.value;policyCalc()"></div>
   </div>
-  <div class="g3" style="margin-bottom:1rem">
-    <div class="field"><label>Eligible properties citywide <span class="val" id="polPropsVal">50,000</span></label><input type="range" min="10000" max="200000" step="5000" value="50000" id="polProps" oninput="document.getElementById('polPropsVal').textContent=Number(this.value).toLocaleString();policyCalc()"></div>
-    <div class="field"><label>Adoption rate <span class="val" id="polAdoptVal">5%</span></label><input type="range" min="1" max="25" step="1" value="5" id="polAdopt" oninput="document.getElementById('polAdoptVal').textContent=this.value+'%';policyCalc()"></div>
-    <div class="field"><label>% receiving grant assistance <span class="val" id="polGrantVal">30%</span></label><input type="range" min="0" max="100" step="5" value="30" id="polGrant" oninput="document.getElementById('polGrantVal').textContent=this.value+'%';policyCalc()"></div>
+  <div class="g3" style="margin-bottom:.9rem">
+    <div class="fld"><label>Eligible properties citywide <span class="v" id="polProV">50,000</span></label><input type="range" min="10000" max="200000" step="5000" value="50000" id="polProps" oninput="document.getElementById('polProV').textContent=Number(this.value).toLocaleString();policyCalc()"></div>
+    <div class="fld"><label>Adoption rate (% that build) <span class="v" id="polAdV">5%</span></label><input type="range" min="1" max="25" step="1" value="5" id="polAdopt" oninput="document.getElementById('polAdV').textContent=this.value+'%';policyCalc()"></div>
+    <div class="fld"><label>Grant size per unit ($) <span class="v" id="polGrV">$40,000</span></label><input type="range" min="10000" max="80000" step="5000" value="40000" id="polGrantSize" oninput="document.getElementById('polGrV').textContent='$'+Number(this.value).toLocaleString();policyCalc()"></div>
+  </div>
+  <div class="g3" style="margin-bottom:.9rem">
+    <div class="fld"><label>Grant program budget ($M) <span class="v" id="polBudV">$20M</span></label><input type="range" min="1" max="100" step="1" value="20" id="polBudget" oninput="document.getElementById('polBudV').textContent='$'+this.value+'M';policyCalc()"></div>
+    <div class="fld"><label>Target AMI level for grant-linked units</label><select id="polTargetAmi" onchange="policyCalc()"><option value="0.30">30% AMI</option><option value="0.50">50% AMI</option><option value="0.60" selected>60% AMI (ordinance req.)</option><option value="0.80">80% AMI</option></select></div>
+    <div class="fld"><label>Target net ROI for homeowner (% of cost/yr) <span class="v" id="polRoiV">4%</span></label><input type="range" min="1" max="10" step="0.5" value="4" id="polRoi" oninput="document.getElementById('polRoiV').textContent=Number(this.value).toFixed(1)+'%';policyCalc()"></div>
   </div>
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.06em">Citywide impact estimates</div>
-  <div class="metrics" id="policyMetrics"></div>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.9rem;text-transform:uppercase;letter-spacing:.06em">Citywide impact estimates</div>
+  <div class="mets" id="policyMets"></div>
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">HUD SAFMR by neighborhood cluster (1-BR, FY2025)</div>
-  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">Average HUD Small Area Fair Market Rents across Chicago neighborhood clusters. These ZIP-level benchmarks vary from under $1,000/mo in some South/West Side areas to over $2,000/mo near the lakefront — driving significantly different affordability outcomes for ADU projects in different parts of the city.</p>
-  <div id="policyBarChart" class="bar-chart"></div>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">HUD SAFMR by neighborhood cluster (1-BR, FY2025)</div>
+  <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem">Average HUD Small Area FMRs by neighborhood cluster. These ZIP-level benchmarks — from under $1,000/mo on the South/West Side to over $2,200/mo near the lakefront — determine how much of a subsidy gap exists to reach affordability targets in each neighborhood.</p>
+  <div id="polBarChart"></div>
   <hr>
-  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">AMI affordability by neighborhood tier</div>
-  <div id="policyAmiTable"></div>
-  <div class="warnbox" style="margin-top:.75rem;font-size:12px"><strong>Policymaker notes:</strong> These are scenario-based planning estimates. Actual production depends on aldermanic opt-in patterns in RS-zoned areas, construction capacity (coach houses require RAP-certified contractors — ~24 qualifying firms citywide as of late 2025), financing availability, and homeowner awareness. The pilot program produced approximately 250–300 ADUs over 4 years across five zones. Citywide scaling requires deliberate program investment. The 2-ADU affordability mandate (50% of units at 60% AMI, §2-44-106) creates a structural lever for serving moderate-income households. Annual reporting to the Zoning Committee begins March 31, 2027. <a href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago ADU program →</a></div>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">Subsidy gap analysis — what grant is needed to achieve each AMI level?</div>
+  <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem" id="subGapDesc"></p>
+  <div id="subGapChart"></div>
+  <div class="wbox" id="subGapNote" style="margin-top:.65rem;font-size:12px"></div>
+  <hr>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">Grant outcomes: units built &amp; affordable units produced</div>
+  <div id="grantOutcomePanel"></div>
+  <div class="wbox" style="margin-top:.65rem;font-size:12px">Note on affordable unit estimates: The "affordable units" count in the grant outcomes panel reflects units where the grant fully closes the subsidy gap to the target AMI level — i.e., the owner receives enough subsidy that charging the AMI-appropriate rent still yields the target ROI. This is distinct from the ordinance's 2-ADU affordability mandate, which requires 50% of units to be at 60% AMI regardless of subsidy. In practice, whether a granted unit is actually rented at an affordable rate requires ongoing compliance monitoring. <a href="https://www.chicago.gov/city/en/depts/doh/provdrs/homeowners/svcs/adu-ordinance.html" target="_blank">Chicago DOH ADU program →</a></div>
+  <hr>
+  <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-bottom:.65rem;text-transform:uppercase;letter-spacing:.06em">AMI affordability by neighborhood tier (1-BR, 2-person HH)</div>
+  <div id="polAmiTable"></div>
 </div>
 </div><!-- end policyMode -->
 
-<!-- ============================================================ ASSUMPTIONS -->
-<div id="assumptionsMode" class="hidden">
-<div class="panel">
-  <div class="plabel">Construction cost assumptions &amp; methodology</div>
-  <div class="assm-section">
-    <div class="assm-title">Hard cost rates ($/sq ft) by ADU type and finish level</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">All-in hard cost rates below represent Chicago-market construction costs inclusive of materials and labor, but <em>exclusive</em> of design/permits (soft costs), utility connections, and site conditions — those are added separately. Rates reflect 2025–2026 Chicago market conditions with union/prevailing wage labor assumptions for coach houses (due to the RAP requirement in the ordinance).</p>
-    <table class="assm-table">
-      <thead><tr><th>ADU Type</th><th>Basic ($/sqft)</th><th>Mid-range ($/sqft)</th><th>High-end ($/sqft)</th><th>Typical total range</th><th>Source</th></tr></thead>
-      <tbody>
-        <tr><td>Basement/garden conversion</td><td>$130</td><td>$190</td><td>$270</td><td>$40k–$175k</td><td><span class="src-badge">Chicago ADU guide 2024</span><span class="src-badge">Sweeten.com</span></td></tr>
-        <tr><td>Garage conversion</td><td>$100</td><td>$160</td><td>$240</td><td>$30k–$170k</td><td><span class="src-badge">Assembly Service IL 2026</span></td></tr>
-        <tr><td>Addition to existing structure</td><td>$175</td><td>$230</td><td>$310</td><td>$80k–$280k</td><td><span class="src-badge">Bofran Builders Chicago 2025</span></td></tr>
-        <tr><td>Detached coach house (new construction)</td><td>$200</td><td>$270</td><td>$350</td><td>$125k–$350k+</td><td><span class="src-badge">Assembly Service IL 2026</span><span class="src-badge">Chicago Sun-Times 2024</span></td></tr>
-      </tbody>
-    </table>
-    <div class="infobox" style="font-size:12px"><strong>Key cost drivers not captured in $/sqft:</strong> Coach house costs run $200–$400+/sq ft — higher than typical residential construction ($150–$270/sq ft) because fixed costs (foundation, roof, full kitchen/bath, separate utility meters, code-compliant egress) don't scale down with unit size. Utility connection costs ($15k–$40k) are estimated separately. Site access in Chicago backyards (alley delivery, limited equipment) typically adds 10–15% vs. standard new construction. Source: <a href="https://www.assemblyserviceil.com/chicago-coach-house-conversion-cost.html" target="_blank">Assembly Service IL</a>, Chicago ADU Construction Costs guide (chicagoadu.com), Angi 2025.</div>
-  </div>
-  <div class="assm-section">
-    <div class="assm-title">Soft costs, contingency, and utility connections</div>
-    <table class="assm-table">
-      <thead><tr><th>Item</th><th>Default assumption</th><th>Range</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td>Soft costs (design, permits, fees)</td><td>12% of hard costs</td><td>8–18%</td><td>Architecture/engineering: $8k–$40k depending on complexity. Chicago ADU permits: $3k–$12k. Historic district compliance adds cost.</td></tr>
-        <tr><td>Hard cost contingency</td><td>5% of hard costs</td><td>0–20%</td><td>Standard construction industry allowance for scope creep, unforeseen conditions, material price changes. ADU conversions (especially basements) warrant higher contingency due to discovery risk.</td></tr>
-        <tr><td>Utility connection — share existing</td><td>+$8,000</td><td>$5k–$15k</td><td>Minimal new work; tap into existing systems.</td></tr>
-        <tr><td>Utility connection — separate meter (typical)</td><td>+$18,000</td><td>$15k–$40k</td><td>Per Assembly Service IL: electric $8k–$25k, plumbing $10k–$30k for separate meters. HVAC (mini-split typical): $6k–$22k.</td></tr>
-        <tr><td>Utility connection — full new service</td><td>+$30,000</td><td>$25k–$55k</td><td>Full separate services including new service entrance, gas line, sewer connection. Complex urban sites.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="assm-section">
-    <div class="assm-title">Coach house component cost breakdown (Assembly Service IL, 2026)</div>
-    <table class="assm-table">
-      <thead><tr><th>Component</th><th>Budget range</th><th>Mid-range</th><th>High-end</th></tr></thead>
-      <tbody>
-        <tr><td>Architecture &amp; engineering</td><td>$8k–$15k</td><td>$15k–$25k</td><td>$25k–$40k</td></tr>
-        <tr><td>Permits &amp; city fees</td><td>$3k–$5k</td><td>$5k–$8k</td><td>$8k–$12k</td></tr>
-        <tr><td>Foundation (new)</td><td>$15k–$25k</td><td>$25k–$35k</td><td>$35k–$50k</td></tr>
-        <tr><td>Framing &amp; structure</td><td>$20k–$30k</td><td>$30k–$45k</td><td>$45k–$60k</td></tr>
-        <tr><td>Roofing</td><td>$8k–$12k</td><td>$12k–$18k</td><td>$18k–$25k</td></tr>
-        <tr><td>Electrical (separate meter)</td><td>$8k–$12k</td><td>$12k–$18k</td><td>$18k–$25k</td></tr>
-        <tr><td>Plumbing (separate meter)</td><td>$10k–$15k</td><td>$15k–$22k</td><td>$22k–$30k</td></tr>
-        <tr><td>HVAC (mini-split typical)</td><td>$6k–$10k</td><td>$10k–$15k</td><td>$15k–$22k</td></tr>
-        <tr><td>Kitchen</td><td>$12k–$20k</td><td>$20k–$35k</td><td>$35k–$50k</td></tr>
-        <tr><td>Bathroom</td><td>$8k–$15k</td><td>$15k–$25k</td><td>$25k–$40k</td></tr>
-        <tr><td>Interior finishes</td><td>$15k–$25k</td><td>$25k–$40k</td><td>$40k–$60k</td></tr>
-        <tr><td>Exterior finishes</td><td>$10k–$15k</td><td>$15k–$25k</td><td>$25k–$40k</td></tr>
-      </tbody>
-    </table>
-    <div class="data-note" style="margin-top:.5rem">Source: <a href="https://www.assemblyserviceil.com/chicago-coach-house-conversion-cost.html" target="_blank" style="color:var(--gold)">Assembly Service IL — Chicago Coach House Conversion Cost 2026</a>. Self-reported project data from Chicago Cityscape pilot permit tracking also suggests median coach house costs of approximately $185k–$275k for 500–700 sq ft units in the North/Northwest pilot zones.</div>
-  </div>
-</div>
-
-<div class="panel">
-  <div class="plabel">Operating cost assumptions</div>
-  <table class="assm-table">
-    <thead><tr><th>Item</th><th>Default</th><th>Reasonable range</th><th>Basis</th></tr></thead>
+<!-- ======================================================= ASSUMPTIONS -->
+<div id="assumptionsMode" class="gone">
+<div class="pnl">
+  <div class="plbl">Construction cost assumptions</div>
+  <table class="at">
+    <thead><tr><th>ADU Type</th><th>Basic ($/sqft)</th><th>Mid ($/sqft)</th><th>High ($/sqft)</th><th>Typical total range</th><th>Source</th></tr></thead>
     <tbody>
-      <tr><td>Vacancy rate</td><td>7%</td><td>4–12%</td><td>Chicago small rental vacancy rates; Chicago pilot ADUs in desirable neighborhoods reported strong occupancy. Higher for new/unestablished units.</td></tr>
-      <tr><td>Maintenance reserve</td><td>$2,400/yr</td><td>$1,200–$6,000/yr</td><td>Standard rule of thumb: 1–2% of construction cost annually. Lower for new construction; higher for older conversion units with aging systems.</td></tr>
-      <tr><td>Insurance add-on</td><td>$1,200/yr</td><td>$600–$3,000/yr</td><td>Rough estimate for landlord/dwelling policy add-on. Standard homeowner policies do not cover rental units. ADU-specific products are still developing in Illinois; consult an independent broker.</td></tr>
-      <tr><td>Property tax increase</td><td>$3,000/yr</td><td>$1,500–$6,000/yr</td><td>Adding an ADU increases assessed value similarly to other improvements. Cook County Assessor notes property classification changes are possible (e.g., single-family → two-flat). Home Improvement Exemption can defer increases for up to 4 years.</td></tr>
-      <tr><td>Property management</td><td>0% (self-managed)</td><td>8–10% of rent</td><td>Typical Chicago PM fees for small residential rentals.</td></tr>
+      <tr><td>Basement / garden conversion</td><td>$130</td><td>$190</td><td>$270</td><td>$40k–$175k</td><td><span class="sb">chicagoadu.com 2024</span></td></tr>
+      <tr><td>Garage conversion</td><td>$100</td><td>$160</td><td>$240</td><td>$30k–$170k</td><td><span class="sb">Assembly Service IL 2026</span></td></tr>
+      <tr><td>Addition to existing</td><td>$175</td><td>$230</td><td>$310</td><td>$80k–$280k</td><td><span class="sb">Bofran Builders 2025</span></td></tr>
+      <tr><td>Detached coach house</td><td>$200</td><td>$270</td><td>$350</td><td>$125k–$350k+</td><td><span class="sb">Assembly Service IL 2026</span></td></tr>
     </tbody>
   </table>
+  <p style="font-size:12px;color:var(--tx2);margin-top:.5rem">Hard cost rates are Chicago-market costs inclusive of materials and labor, exclusive of soft costs, utility connections, site conditions, and contingency (added separately). Coach houses require RAP-certified contractors per §2-44-106(g)(4) — approximately 24 qualifying firms citywide as of late 2025.</p>
 </div>
-
-<div class="panel">
-  <div class="plabel">Rent data &amp; AMI methodology</div>
-  <div class="assm-section">
-    <div class="assm-title">HUD FY2025 Small Area Fair Market Rents (SAFMR)</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">When a user enters a Chicago ZIP code, the tool loads HUD's FY2025 Small Area Fair Market Rent (SAFMR) data for that ZIP code. SAFMRs are published annually by the U.S. Department of Housing and Urban Development. They represent the 40th percentile of gross rents (including utilities) for standard-quality, recently-rented units — excluding subsidized units and units rented more than 2 years ago. Chicago-Naperville-Joliet Metro (METRO16980M16980) is a <em>mandatory</em> SAFMR area, meaning Cook County PHAs are required to use ZIP-level data rather than a single countywide figure.</p>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">FMRs are a market data benchmark, not a subsidy or a price cap. They are used here to: (1) give users a publicly-verified rent reference point by ZIP code and bedroom count; (2) anchor the affordability calculations. Market rents in some neighborhoods will be above the FMR; in others, below. Users can and should adjust the rent slider to reflect their own research (Zillow, Craigslist, Redfin, neighborhood knowledge).</p>
-    <div class="infobox" style="font-size:12px">Data source: <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD SAFMR dataset</a>, FY2025 (effective October 2024). Cook County ZIP-level data accessed via <a href="https://www.ushousingdata.com/fair-market-rents/cook-county-il" target="_blank">USHousingData.com</a>. Data is baked into the tool for offline use; update annually from the HUD SAFMR Excel file at HUD User.</div>
-  </div>
-  <div class="assm-section">
-    <div class="assm-title">AMI calculations</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">Area Median Income (AMI) values use the Chicago-Naperville-Joliet HUD Metro FMR Area. The FY2025 AMI for a 4-person household is approximately $115,700. Household-size adjustments follow HUD methodology (Section 8 income limit factors): 1-person = 70%, 2-person = 80%, 3-person = 90%, 4-person = 100%. The tool adjusts the displayed household size to match the unit type — studios use 1-person assumptions; 1-bedroom units use 2-person; 2-bedroom units use 3-person; 3-bedroom units use 4-person. Affordable rent is calculated as 30% of monthly gross income at the relevant AMI level and household size.</p>
-    <p style="font-size:13px;color:var(--text2)">The 60% AMI rent cap used in the two-ADU affordability mandate is published annually by the City of Chicago Department of Housing. Current 2025 rent limits are available at <a href="https://www.chicago.gov/content/dam/city/sites/affordable-requirements-ordinance/2025%20Income%20and%20Rent%20Limits.pdf" target="_blank">chicago.gov/content/dam/city/sites/affordable-requirements-ordinance</a>.</p>
-  </div>
-</div>
-
-<div class="panel">
-  <div class="plabel">Ordinance massing rules — source</div>
-  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">The massing calculator is based on the permanent ADU ordinance (SO2024-0008918), effective April 1, 2026, as codified in the Chicago Municipal Code.</p>
-  <table class="assm-table">
-    <thead><tr><th>Rule</th><th>Code section</th><th>Value</th></tr></thead>
+<div class="pnl">
+  <div class="plbl">Ordinance massing rules (SO2024-0008918, eff. April 1, 2026)</div>
+  <table class="at">
+    <thead><tr><th>Rule</th><th>Code section</th><th>Value / Interpretation</th></tr></thead>
     <tbody>
-      <tr><td>Coach house max floor area</td><td>§17-9-0201-F(9)</td><td>700 sq ft (exclusive of interior stairs)</td></tr>
-      <tr><td>Coach house max floor area (alternate)</td><td>§17-9-0201-F(9)</td><td>60% of required rear setback area (typically 30 ft × lot width)</td></tr>
-      <tr><td>Coach house max height</td><td>§17-9-0201-F</td><td>22 feet above grade</td></tr>
-      <tr><td>Min separation: coach house to principal building</td><td>§17-9-0201-F(8)</td><td>15 ft (can be reduced to 10 ft via administrative adjustment on lots under 125 ft deep)</td></tr>
-      <tr><td>Alley setback (coach house)</td><td>§17-17-0309</td><td>2 ft from rear property line if adjacent to alley; or 10 ft from alley centerline</td></tr>
-      <tr><td>Building age for conversion unit</td><td>§17-2-0303-C</td><td>Principal building must be 20+ years old</td></tr>
-      <tr><td>Max conversion unit density (interior)</td><td>§17-2-0303-C</td><td>33% of existing legal units (rounded per code); single-unit buildings = +1 unit</td></tr>
-      <tr><td>Affordability trigger</td><td>§2-44-106(d)</td><td>2+ ADUs added → 50% must be affordable at 60% AMI; 30-year covenant recorded with Cook County Recorder</td></tr>
-      <tr><td>Coach house: principal building unit limit</td><td>§17-9-0201-F(16)</td><td>Coach house not permitted if principal building has 5+ lawfully established units</td></tr>
-      <tr><td>Short-term rental prohibition</td><td>§17-9-0201-F(17)</td><td>ADUs may not be used for transient occupancy (Airbnb, VRBO, etc.); fine $1,500–$3,000/offense</td></tr>
-      <tr><td>Coach house labor requirement</td><td>§2-44-106(g)(4)</td><td>General contractor and subcontractors must participate in USDOL-registered Apprenticeship Programs</td></tr>
-      <tr><td>Pre-certification required</td><td>§2-44-106(g)</td><td>DOH pre-certification required before building permit application; RS districts require aldermanic opt-in</td></tr>
+      <tr><td>Coach house max floor area</td><td>§17-9-0201-F(9)</td><td>60% of the required rear setback area (typically 30 ft deep × lot width). <strong>No absolute sq ft cap</strong> — the prior 700 sq ft limit was struck from the ordinance. Larger lots can have larger coach houses.</td></tr>
+      <tr><td>Coach house max height</td><td>§17-9-0201-F</td><td>22 feet above grade (measured to top of highest feature)</td></tr>
+      <tr><td>Min separation: coach house to principal building</td><td>§17-9-0201-F(8)</td><td>15 ft. May be reduced to 10 ft via administrative adjustment on lots under 125 ft deep (§17-13-1003-PP)</td></tr>
+      <tr><td>Alley setback</td><td>§17-17-0309</td><td>2 ft from rear property line if adjacent to alley; OR 10 ft from alley centerline</td></tr>
+      <tr><td>Coach house + conversion unit on same property</td><td>§17-9-0201-F(15) [struck]</td><td><strong>Now allowed.</strong> The prohibition on having both was struck from the ordinance. A property may now have one coach house AND one or more conversion units (subject to total unit count limits).</td></tr>
+      <tr><td>Coach house: principal building unit limit</td><td>§17-9-0201-F(16)</td><td>Coach house not permitted if principal building has <strong>5 or more</strong> lawfully established dwelling units</td></tr>
+      <tr><td>Conversion unit building age</td><td>§17-2-0303-C</td><td>Principal building must be at least 20 years old</td></tr>
+      <tr><td>Conversion unit max (interior ADUs)</td><td>§17-2-0303-C</td><td>33% of existing legal units (fractional result: round up if ≥0.5, down if &lt;0.5). Single-unit buildings = +1 unit.</td></tr>
+      <tr><td>Affordability trigger</td><td>§2-44-106(d)</td><td>2+ ADUs added → 50% must be affordable at 60% AMI. 30-year covenant recorded with Cook County Recorder. $500 registration fee per affordable unit.</td></tr>
+      <tr><td>Short-term rental prohibition</td><td>§17-9-0201-F(17)</td><td>ADUs may not be used for transient occupancy (Airbnb, VRBO, etc.). Fine: $1,500–$3,000/offense</td></tr>
+      <tr><td>Coach house labor requirement</td><td>§2-44-106(g)(4)</td><td>General contractor and subs must participate in USDOL-registered Apprenticeship Programs (RAP)</td></tr>
+      <tr><td>RS district opt-in (annual block limits)</td><td>§17-7-0573(1)</td><td>RS-1: 1 ADU/block/yr · RS-2: 2/block/yr · RS-3: 3/block/yr (West, South, Southeast zones only; North/Northwest have no cap)</td></tr>
+      <tr><td>Owner occupancy (RS, West/South/Southeast)</td><td>§17-7-0573(2)</td><td>Required for properties with 1–3 units in West, South, and Southeast pilot areas</td></tr>
     </tbody>
   </table>
-  <div class="infobox" style="font-size:12px;margin-top:.75rem">Full ordinance text: <a href="https://occprodstoragev1.blob.core.usgovcloudapi.net/matterattachmentspublic/c14006fa-774a-4989-8f7cca27745099c6.pdf" target="_blank">SO2024-0008918 (PDF)</a>. Chicago Cityscape summary: <a href="https://www.chicagocityscape.com/blog/what-to-know-about-chicago-s-permanent-adu-ordinance-9e9052e63a" target="_blank">What to know about Chicago's permanent ADU ordinance</a> (Steven Vance, Dec. 2025, updated Mar. 2026).</div>
+  <div class="ibox" style="font-size:12px;margin-top:.65rem">Source: <a href="https://occprodstoragev1.blob.core.usgovcloudapi.net/matterattachmentspublic/c14006fa-774a-4989-8f7cca27745099c6.pdf" target="_blank">Full ordinance SO2024-0008918 (PDF)</a> · <a href="https://www.chicagocityscape.com/blog/what-to-know-about-chicago-s-permanent-adu-ordinance-9e9052e63a" target="_blank">Chicago Cityscape summary (Steven Vance, updated Mar. 2026)</a></div>
 </div>
-
+<div class="pnl">
+  <div class="plbl">Rent data sources</div>
+  <table class="at">
+    <thead><tr><th>Data source</th><th>What it represents</th><th>How used in this tool</th></tr></thead>
+    <tbody>
+      <tr><td>HUD SAFMR (FY2025)</td><td>40th-percentile gross rent (utilities included) for standard-quality, recently-rented units by ZIP code. Published annually by HUD. Mandatory SAFMR area for Chicago (METRO16980M16980).</td><td>Loaded as "HUD FMR" reference point when ZIP is entered. Anchors affordability calculations.</td></tr>
+      <tr><td>Rentcast Market API</td><td>Median listed rental price aggregated from active listings by ZIP and bedroom count. Updated daily. Free tier: 50 calls/month.</td><td>Fetched live when ZIP is entered and displayed as "market median" — the asking rent landlords are currently listing. Requires a Rentcast API key entered by the user.</td></tr>
+    </tbody>
+  </table>
+  <div class="wbox" style="font-size:12px;margin-top:.5rem">Rentcast API access: Rentcast offers 50 free API calls/month on their free plan. To enable live market rent data, enter your Rentcast API key below. The key is stored only in your browser session and never sent anywhere except directly to api.rentcast.io.<br><br>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:.4rem;flex-wrap:wrap">
+    <input type="text" id="rentcastKey" placeholder="Your Rentcast API key (optional)" style="flex:1;min-width:200px;font-size:12px;font-family:'DM Mono',monospace">
+    <button onclick="saveRentcastKey()" style="padding:6px 14px;background:var(--wa);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:12px">Save key &amp; reload</button>
+    <a href="https://www.rentcast.io/api" target="_blank" style="font-size:11px;color:var(--wa)">Get a free key →</a>
+  </div>
+  </div>
+</div>
+<div class="pnl">
+  <div class="plbl">AMI &amp; rent limit methodology</div>
+  <p style="font-size:13px;color:var(--tx2);margin-bottom:.75rem">Chicago-Naperville-Joliet Metro 2025 AMI (4-person HH) ≈ $115,700. HUD household-size adjustment factors: 1-person = 70% ($80,990), 2-person = 80% ($92,560), 3-person = 90% ($104,130), 4-person = 100% ($115,700). Affordable rent is 30% of monthly income at the relevant AMI × household size. The tool maps bedroom count to expected household size: studio → 1-person, 1BR → 2-person, 2BR → 3-person, 3BR → 4-person.</p>
+  <p style="font-size:13px;color:var(--tx2)">Chicago DOH 2025 published rent limits (from the city's Income &amp; Rent Limits chart) differ slightly from the 30%-of-income calculation because DOH uses 1.5 occupants/bedroom and specific utility allowances. For the most precise affordability compliance figures, use the city's published tables: <a href="https://www.chicago.gov/content/dam/city/sites/affordable-requirements-ordinance/2025%20Income%20and%20Rent%20Limits.pdf" target="_blank">2025 Income and Rent Limits (PDF)</a>.</p>
+</div>
 </div><!-- end assumptionsMode -->
 
-<div class="tool-footer">
-  <p>Permanent ADU Ordinance (SO2024-0008918) · Effective April 1, 2026 · HUD FY2025 SAFMR data · Chicago-Naperville-Joliet Metro</p>
-  <p style="margin-top:4px">All figures are estimates for planning purposes only. Not legal, financial, or tax advice. Consult licensed professionals. · <a href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago DOH ADU program</a> · <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD SAFMR source</a></p>
+<div class="tft">
+  <p>Permanent ADU Ordinance SO2024-0008918 · Effective April 1, 2026 · HUD FY2025 SAFMR · Chicago-Naperville-Joliet Metro</p>
+  <p style="margin-top:3px">Estimates for planning purposes only. Not legal, financial, or tax advice. · <a href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago DOH ADU</a> · <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD SAFMR</a> · <a href="https://developers.rentcast.io/" target="_blank">Rentcast API</a></p>
 </div>
-</div><!-- container -->
+
+</div><!-- wrap -->
 
 <script>
-// ========== HUD FY2025 SAFMR DATA — Cook County, IL ==========
-const SAFMR={
-'60601':[2030,2170,2450,3150,3700],'60602':[2030,2170,2450,3150,3700],'60603':[2030,2170,2450,3150,3700],
-'60604':[2030,2170,2450,3150,3700],'60605':[1980,2120,2390,3070,3610],'60606':[2030,2170,2450,3150,3700],
-'60607':[1870,2000,2260,2900,3410],'60608':[1100,1170,1320,1700,1990],'60609':[960,1030,1160,1490,1750],
-'60610':[2230,2390,2700,3470,4080],'60611':[2610,2790,3150,4050,4760],'60612':[960,1030,1160,1490,1750],
-'60613':[1870,2000,2260,2900,3410],'60614':[2280,2440,2750,3540,4150],'60615':[1170,1250,1410,1810,2130],
-'60616':[1480,1580,1780,2290,2690],'60617':[960,1030,1160,1490,1750],'60618':[1440,1540,1740,2230,2620],
-'60619':[960,1030,1160,1490,1750],'60620':[860,920,1040,1340,1570],'60621':[840,900,1010,1300,1530],
-'60622':[1870,2000,2260,2900,3410],'60623':[870,930,1050,1350,1580],'60624':[870,930,1050,1350,1580],
-'60625':[1440,1540,1740,2230,2620],'60626':[1390,1490,1680,2160,2540],'60628':[860,920,1040,1340,1570],
-'60629':[870,930,1050,1350,1580],'60630':[1260,1350,1520,1950,2290],'60631':[1320,1410,1590,2040,2400],
-'60632':[870,930,1050,1350,1580],'60633':[910,970,1100,1410,1660],'60634':[1130,1210,1370,1760,2060],
-'60636':[840,900,1010,1300,1530],'60637':[1100,1170,1320,1700,1990],'60638':[930,1000,1130,1450,1700],
-'60639':[870,930,1050,1350,1580],'60640':[1590,1700,1920,2470,2900],'60641':[1130,1210,1370,1760,2060],
-'60642':[1960,2100,2370,3040,3580],'60643':[1050,1120,1270,1630,1910],'60644':[870,930,1050,1350,1580],
-'60645':[1430,1530,1730,2220,2610],'60646':[1390,1490,1680,2160,2540],'60647':[1730,1850,2090,2690,3160],
-'60649':[960,1030,1160,1490,1750],'60651':[870,930,1050,1350,1580],'60652':[870,930,1050,1350,1580],
-'60653':[1110,1190,1340,1720,2020],'60654':[2280,2440,2750,3540,4150],'60655':[1100,1170,1320,1700,1990],
-'60656':[1180,1260,1420,1830,2150],'60657':[2030,2170,2450,3150,3700],'60659':[1390,1490,1680,2160,2540],
-'60660':[1480,1580,1780,2290,2690],'60661':[2030,2170,2450,3150,3700],
-'60004':[1810,1930,2180,2800,3290],'60016':[1520,1630,1840,2360,2780],'60056':[1550,1660,1870,2400,2820],
-'60076':[1580,1690,1910,2450,2880],'60077':[1490,1590,1800,2310,2720],'60091':[2100,2240,2530,3250,3820],
-'60201':[1960,2100,2370,3040,3580],'60202':[1750,1870,2110,2710,3180],'60203':[2050,2200,2480,3190,3740],
-'60025':[1720,1840,2080,2670,3140],'60104':[1230,1320,1490,1910,2250],'60130':[1370,1460,1650,2120,2490],
-'60153':[1230,1310,1480,1900,2230],'60155':[1160,1240,1400,1800,2110]
-};
+// ===== HUD FY2025 SAFMR DATA =====
+const SAFMR={'60601':[2030,2170,2450,3150,3700],'60602':[2030,2170,2450,3150,3700],'60603':[2030,2170,2450,3150,3700],'60604':[2030,2170,2450,3150,3700],'60605':[1980,2120,2390,3070,3610],'60606':[2030,2170,2450,3150,3700],'60607':[1870,2000,2260,2900,3410],'60608':[1100,1170,1320,1700,1990],'60609':[960,1030,1160,1490,1750],'60610':[2230,2390,2700,3470,4080],'60611':[2610,2790,3150,4050,4760],'60612':[960,1030,1160,1490,1750],'60613':[1870,2000,2260,2900,3410],'60614':[2280,2440,2750,3540,4150],'60615':[1170,1250,1410,1810,2130],'60616':[1480,1580,1780,2290,2690],'60617':[960,1030,1160,1490,1750],'60618':[1440,1540,1740,2230,2620],'60619':[960,1030,1160,1490,1750],'60620':[860,920,1040,1340,1570],'60621':[840,900,1010,1300,1530],'60622':[1870,2000,2260,2900,3410],'60623':[870,930,1050,1350,1580],'60624':[870,930,1050,1350,1580],'60625':[1440,1540,1740,2230,2620],'60626':[1390,1490,1680,2160,2540],'60628':[860,920,1040,1340,1570],'60629':[870,930,1050,1350,1580],'60630':[1260,1350,1520,1950,2290],'60631':[1320,1410,1590,2040,2400],'60632':[870,930,1050,1350,1580],'60633':[910,970,1100,1410,1660],'60634':[1130,1210,1370,1760,2060],'60636':[840,900,1010,1300,1530],'60637':[1100,1170,1320,1700,1990],'60638':[930,1000,1130,1450,1700],'60639':[870,930,1050,1350,1580],'60640':[1590,1700,1920,2470,2900],'60641':[1130,1210,1370,1760,2060],'60642':[1960,2100,2370,3040,3580],'60643':[1050,1120,1270,1630,1910],'60644':[870,930,1050,1350,1580],'60645':[1430,1530,1730,2220,2610],'60646':[1390,1490,1680,2160,2540],'60647':[1730,1850,2090,2690,3160],'60649':[960,1030,1160,1490,1750],'60651':[870,930,1050,1350,1580],'60652':[870,930,1050,1350,1580],'60653':[1110,1190,1340,1720,2020],'60654':[2280,2440,2750,3540,4150],'60655':[1100,1170,1320,1700,1990],'60656':[1180,1260,1420,1830,2150],'60657':[2030,2170,2450,3150,3700],'60659':[1390,1490,1680,2160,2540],'60660':[1480,1580,1780,2290,2690],'60661':[2030,2170,2450,3150,3700],'60004':[1810,1930,2180,2800,3290],'60016':[1520,1630,1840,2360,2780],'60056':[1550,1660,1870,2400,2820],'60076':[1580,1690,1910,2450,2880],'60077':[1490,1590,1800,2310,2720],'60091':[2100,2240,2530,3250,3820],'60201':[1960,2100,2370,3040,3580],'60202':[1750,1870,2110,2710,3180],'60203':[2050,2200,2480,3190,3740],'60025':[1720,1840,2080,2670,3140],'60104':[1230,1320,1490,1910,2250],'60130':[1370,1460,1650,2120,2490],'60153':[1230,1310,1480,1900,2230],'60155':[1160,1240,1400,1800,2110]};
 
-const NHOODCLUSTERS=[
+const NHCLUSTERS=[
   {name:'Far South Side',zips:['60620','60628','60633','60643','60655'],color:'#7A4F1A'},
   {name:'West Side',zips:['60612','60621','60623','60624','60636','60644','60651'],color:'#993C1D'},
   {name:'South Side',zips:['60609','60615','60617','60619','60637','60649','60653'],color:'#BA7517'},
   {name:'Northwest Side',zips:['60630','60634','60639','60641','60646'],color:'#4A8F42'},
   {name:'North Side',zips:['60626','60640','60645','60659','60660'],color:'#2D5A27'},
-  {name:'Logan Sq / Humboldt',zips:['60618','60625','60647','60651'],color:'#1A3A5A'},
+  {name:'Logan Sq / Humboldt',zips:['60618','60625','60647'],color:'#1A3A5A'},
   {name:'Wicker Pk / Bucktown',zips:['60622','60642'],color:'#185FA5'},
   {name:'Lincoln Pk / Lakeview',zips:['60613','60614','60657'],color:'#042C53'},
   {name:'Near North / River N',zips:['60610','60611','60654','60661'],color:'#26215C'},
 ];
 
 const ADU={
-  basement:{basic:130,mid:190,high:270,note:'Conversion of existing basement. Costs vary widely with ceiling height (7 ft minimum required), egress window requirements, waterproofing, and existing plumbing rough-ins. High contingency recommended due to discovery risk. Building must be 20+ years old (§17-2-0303-C).'},
-  garage:{basic:100,mid:160,high:240,note:'Converting an existing garage. Lower cost since walls/roof exist, but typically requires significant insulation, HVAC, and electrical upgrades. Most existing Chicago garages were not built to support a second floor — structural assessment is critical. Note: you cannot have both a conversion unit and a coach house on the same property.'},
-  attached:{basic:175,mid:230,high:310,note:'Rear or side addition to existing structure. Can be complex — requires careful structural integration and may trigger broader code compliance for the existing structure in some cases.'},
-  detached:{basic:200,mid:270,high:350,note:'New detached structure in the rear yard. Highest cost but most flexible. Coach houses require contractors to participate in USDOL Registered Apprenticeship Programs (RAP) — approximately 24 qualifying firms citywide as of late 2025 (§2-44-106(g)(4)). This may constrain contractor availability and affect pricing. Max 700 sq ft floor area; max 22 ft height. Cannot be built if principal building has 5+ units.'},
+  basement:{basic:130,mid:190,high:270,note:'Conversion of existing basement space. Building must be at least 20 years old (§17-2-0303-C). Ceiling must be minimum 7 ft (code). Costs vary greatly with egress window requirements, waterproofing, and existing plumbing rough-ins. High contingency recommended due to discovery risk. A coach house may now also be added to the same property under the permanent ordinance.'},
+  garage:{basic:100,mid:160,high:240,note:'Converting an existing garage structure. Typically requires significant insulation, HVAC, and electrical work. Most Chicago garages were not built to support habitable space — structural assessment is critical. A separate conversion unit may also be added to the same property under the permanent ordinance.'},
+  attached:{basic:175,mid:230,high:310,note:'Rear or side addition to existing structure. Requires careful structural integration. Building must be at least 20 years old for the conversion unit provision (§17-2-0303-C). May trigger broader code compliance for the existing structure in some cases.'},
+  detached:{basic:200,mid:270,high:350,note:'New detached coach house in the rear yard. No absolute square footage cap under the permanent ordinance — the 700 sq ft limit was removed. Max area is 60% of required rear setback area (typically 30 ft × lot width). Max height: 22 ft. Not permitted if principal building has 5+ units (§17-9-0201-F(16)). Coach house contractors must participate in USDOL Registered Apprenticeship Programs (§2-44-106(g)(4)) — ~24 qualifying firms citywide as of late 2025. A conversion unit may also be added to the same property.'},
 };
 
-const AMI4=115700;
-const HH_FACTORS=[0.70,0.80,0.90,1.00];
+const SC={cash:'#2D5A27',grant:'#C4922A',loan:'#1A3A5A',soft:'#4A8F42',hard:'#185FA5',cont:'#7A4F1A',util:'#BA7517',site:'#993C1D'};
+const AMI4=115700,HHF=[0.70,0.80,0.90,1.00];
+let finTab='cash',grantAmt=40000,amiTab='forward',currentFMR=null,mktRentByBed={};
 
-const SEG_COLORS={cash:'#2D5A27',grant:'#C4922A',loan:'#1A3A5A',softCost:'#4A8F42',hardCost:'#185FA5',contingency:'#7A4F1A',utility:'#BA7517',site:'#993C1D'};
+function getHH(beds){return Math.min(parseInt(beds)+1,4)}
+function getBL(b){return['Studio','1-bedroom','2-bedroom','3-bedroom'][b]}
 
-let finTab='cash',grantAmt=40000,amiTab='forward',currentMode='homeowner',currentFMR=null;
+// ===== RENTCAST LIVE FETCH =====
+function getRentcastKey(){return localStorage.getItem('rcKey')||''}
+function saveRentcastKey(){const k=document.getElementById('rentcastKey').value.trim();localStorage.setItem('rcKey',k);alert('Key saved. Re-enter a ZIP to load market data.');lookupZip();}
 
-function getBedLabel(b){return['Studio','1-bedroom','2-bedroom','3-bedroom'][b]}
-function getHHSize(beds){return Math.min(parseInt(beds)+1,4)}
+async function fetchRentcast(zip){
+  const key=getRentcastKey();
+  if(!key){return null;}
+  try{
+    const r=await fetch(`https://api.rentcast.io/v1/markets?zipCode=${zip}&propertyType=Apartment&bedrooms=0,1,2,3`,{headers:{'X-Api-Key':key}});
+    if(!r.ok)return null;
+    const d=await r.json();
+    return d;
+  }catch(e){return null;}
+}
 
-function lookupZip(){
+async function lookupZip(){
   const z=document.getElementById('zipInput').value.trim();
   const fEl=document.getElementById('fmrResult');
   const nEl=document.getElementById('rentSourceNote');
-  if(z.length!==5||!/^\d{5}$/.test(z)){fEl.innerHTML='<span class="fmr-pill">Enter valid 5-digit ZIP</span>';currentFMR=null;calc();return;}
+  mktRentByBed={};
+  if(z.length!==5||!/^\d{5}$/.test(z)){fEl.innerHTML='<span class="fpil">Enter valid 5-digit ZIP</span>';currentFMR=null;calc();return;}
   if(SAFMR[z]){
     currentFMR=SAFMR[z];
     const beds=parseInt(document.getElementById('bedrooms').value);
-    const fmrVal=currentFMR[beds];
-    fEl.innerHTML=`<span class="fmr-pill">Studio: $${currentFMR[0].toLocaleString()}</span><span class="fmr-pill">1BR: $${currentFMR[1].toLocaleString()}</span><span class="fmr-pill">2BR: $${currentFMR[2].toLocaleString()}</span><span class="fmr-pill">3BR: $${currentFMR[3].toLocaleString()}</span>`;
-    document.getElementById('rent').value=fmrVal;
-    document.getElementById('rentDisp').textContent='$'+fmrVal.toLocaleString();
-    nEl.innerHTML=`<strong>HUD FY2025 SAFMR loaded for ZIP ${z}.</strong> The ${getBedLabel(beds)} FMR is $${fmrVal.toLocaleString()}/mo — the 40th-percentile gross rent (utilities included) for standard-quality units in this ZIP, per HUD's annual Small Area Fair Market Rent survey. Adjust the rent slider above to model scenarios above or below this benchmark.`;
-    nEl.style.color='var(--gold)';
+    const fv=currentFMR[beds];
+    let pillsHtml=`<span class="fpil">Studio $${currentFMR[0].toLocaleString()}</span><span class="fpil">1BR $${currentFMR[1].toLocaleString()}</span><span class="fpil">2BR $${currentFMR[2].toLocaleString()}</span><span class="fpil">3BR $${currentFMR[3].toLocaleString()}</span>`;
+    fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">Loading market data…</span>';
+    document.getElementById('rent').value=fv;
+    document.getElementById('rentDisp').textContent='$'+fv.toLocaleString();
+    nEl.innerHTML=`<strong>HUD FY2025 SAFMR for ZIP ${z}:</strong> ${getBL(beds)} FMR = $${fv.toLocaleString()}/mo (40th-percentile gross rent). Loading Rentcast market median…`;
+    nEl.style.color='var(--gd)';
+    // Try Rentcast
+    const mkt=await fetchRentcast(z);
+    if(mkt&&mkt.rentalData){
+      const rd=mkt.rentalData;
+      // map bed counts
+      [0,1,2,3].forEach(b=>{
+        const key=b===0?'studio':(b+'Bedroom');
+        if(rd[key]&&rd[key].averageRent)mktRentByBed[b]=Math.round(rd[key].averageRent);
+      });
+      const mktV=mktRentByBed[beds];
+      if(mktV){
+        pillsHtml+=`<span class="mktpil">Market median (Rentcast): $${mktV.toLocaleString()}/mo</span>`;
+        fEl.innerHTML=pillsHtml;
+        nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (40th-pct gross rent) · <strong>Rentcast market median: $${mktV.toLocaleString()}/mo</strong> (active listings). Adjust the rent slider to model your specific scenario.`;
+      }else{
+        fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">No Rentcast data for this ZIP</span>';
+        nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo.</strong> No Rentcast data for this ZIP. Add a Rentcast API key in the Assumptions tab for live market data.`;
+      }
+    }else{
+      fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">'+(getRentcastKey()?'Rentcast error':'Add API key for market data')+'</span>';
+      nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (40th-pct gross rent). ${getRentcastKey()?'Rentcast API error — check key.':'Enter a Rentcast API key in the Assumptions tab to load live market median rents.'}`;
+    }
+    nEl.style.color='var(--gd)';
   }else{
     currentFMR=null;
-    fEl.innerHTML='<span class="fmr-pill">ZIP not in Cook County SAFMR data — use manual estimate</span>';
-    nEl.textContent='ZIP not found in HUD Cook County SAFMR dataset. Using manual rent estimate.';
-    nEl.style.color='var(--text3)';
+    fEl.innerHTML='<span class="fpil">ZIP not in Cook County SAFMR data</span>';
+    nEl.textContent='ZIP not found in HUD Cook County SAFMR data. Using manual rent estimate.';
+    nEl.style.color='var(--tx3)';
   }
   calc();
 }
 
 function onBedsChange(){
-  const beds=parseInt(document.getElementById('bedrooms').value);
-  document.getElementById('bedsLabel').textContent=getBedLabel(beds);
+  const b=parseInt(document.getElementById('bedrooms').value);
+  document.getElementById('bedsLabel').textContent=getBL(b);
   if(currentFMR){
-    const v=currentFMR[beds];
+    const v=currentFMR[b];
     document.getElementById('rent').value=v;
     document.getElementById('rentDisp').textContent='$'+v.toLocaleString();
-    document.getElementById('rentSourceNote').innerHTML=`<strong>HUD FY2025 SAFMR:</strong> ${getBedLabel(beds)} FMR = $${v.toLocaleString()}/mo. Adjust slider to model different scenarios.`;
-    document.getElementById('rentSourceNote').style.color='var(--gold)';
+    const mkt=mktRentByBed[b];
+    document.getElementById('rentSourceNote').innerHTML=`<strong>HUD SAFMR (${getBL(b)}): $${v.toLocaleString()}/mo</strong>`+(mkt?` · <strong>Rentcast median: $${mkt.toLocaleString()}/mo</strong>`:'');
+    document.getElementById('rentSourceNote').style.color='var(--gd)';
   }
   calc();
 }
@@ -610,97 +595,100 @@ function onRentSlide(){
   const v=parseInt(document.getElementById('rent').value);
   document.getElementById('rentDisp').textContent='$'+v.toLocaleString();
   if(currentFMR){
-    const beds=parseInt(document.getElementById('bedrooms').value);
-    const fmr=currentFMR[beds];
-    const pct=Math.round(v/fmr*100);
-    document.getElementById('rentSourceNote').innerHTML=`HUD SAFMR benchmark: <strong>$${fmr.toLocaleString()}/mo.</strong> Your estimate ($${v.toLocaleString()}) is <strong>${pct}% of FMR</strong> for this ZIP.`;
-    document.getElementById('rentSourceNote').style.color=pct>115?'var(--warn)':pct<85?'var(--accent)':'var(--gold)';
+    const b=parseInt(document.getElementById('bedrooms').value);
+    const fmr=currentFMR[b],mkt=mktRentByBed[b];
+    const fp=Math.round(v/fmr*100);
+    let s=`HUD SAFMR: <strong>$${fmr.toLocaleString()}/mo</strong> → your estimate is ${fp}% of FMR`;
+    if(mkt){const mp=Math.round(v/mkt*100);s+=` · Rentcast market median: <strong>$${mkt.toLocaleString()}/mo</strong> → ${mp}% of market`;}
+    document.getElementById('rentSourceNote').innerHTML=s;
+    document.getElementById('rentSourceNote').style.color=fp>115?'var(--wa)':fp<85?'var(--ac)':'var(--gd)';
   }
   calc();
 }
 
-function onTypeChange(){
-  const t=document.getElementById('aduType').value;
-  if(t==='detached'){document.getElementById('sqft').max=700;}
-  else{document.getElementById('sqft').max=1200;}
-  updateMassing();calc();
+function onTypeChange(){updateMassing();calc();}
+
+function syncLoan(id,dispId){
+  const v=parseInt(document.getElementById(id).value);
+  document.getElementById(dispId).textContent='$'+v.toLocaleString();
+  calc();
 }
 
 function setFinTab(t,el){
   finTab=t;
-  document.querySelectorAll('#finTabs .tab').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  ['Cash','Heloc','Refi','Construction'].forEach(x=>document.getElementById('finPanel'+x).classList.toggle('hidden',x.toLowerCase()!==t));
+  document.querySelectorAll('#finTabs .tab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  ['Cash','Heloc','Refi','Construction'].forEach(x=>document.getElementById('fp'+x).classList.toggle('gone',x.toLowerCase()!==t));
   calc();
 }
-
-function setGrant(a,el){
-  grantAmt=a;
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('sel'));
-  el.classList.add('sel');calc();
-}
-
+function setGrant(a,el){grantAmt=a;document.querySelectorAll('.pil').forEach(p=>p.classList.remove('on'));el.classList.add('on');calc();}
 function setAmiTab(t,el){
   amiTab=t;
-  document.querySelectorAll('#amiTabs .tab').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('amiForward').classList.toggle('hidden',t!=='forward');
-  document.getElementById('amiReverse').classList.toggle('hidden',t!=='reverse');
+  document.querySelectorAll('#amiTabs .tab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('amiForward').classList.toggle('gone',t!=='forward');
+  document.getElementById('amiReverse').classList.toggle('gone',t!=='reverse');
   renderAMI(parseInt(document.getElementById('rent').value));
 }
-
 function onAduCountChange(){
   const n=parseInt(document.getElementById('numAdus').value);
-  document.getElementById('twoAduPanel').classList.toggle('hidden',n!==2);
-  document.getElementById('twoAduResults').classList.toggle('hidden',n!==2);
+  document.getElementById('twoAduPanel').classList.toggle('gone',n!==2);
+  document.getElementById('twoAduResults').classList.toggle('gone',n!==2);
   calc();
 }
-
 function setMode(m){
-  currentMode=m;
   ['homeowner','policy','assumptions'].forEach(x=>{
-    document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('active',m===x);
-    document.getElementById(x+'Mode').classList.toggle('hidden',m!==x);
+    document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('on',m===x);
+    document.getElementById(x+'Mode').classList.toggle('gone',m!==x);
   });
   if(m==='policy')policyCalc();
+  if(m==='assumptions'&&getRentcastKey())document.getElementById('rentcastKey').value=getRentcastKey();
 }
 
+// ===== MASSING =====
 function updateMassing(){
   const type=document.getElementById('aduType').value;
   const sqft=parseInt(document.getElementById('sqft').value);
-  const lotDepth=parseInt(document.getElementById('lotDepth').value);
-  const existingUnits=parseInt(document.getElementById('existingUnits').value);
-  const lotWidth=25;// Chicago standard lot
-  const reqRearSetback=Math.min(30,lotDepth*0.24);// ~24% of lot depth, typically 30ft
-  const maxBySetback=Math.round(reqRearSetback*0.60*lotWidth);
-  const isCoachHouse=type==='detached';
-  const maxAllowed=isCoachHouse?Math.min(700,maxBySetback):null;
-  const maxConversions=existingUnits===1?1:Math.round(existingUnits*0.33+0.001);
-  const overLimit=isCoachHouse&&sqft>700;
+  const lotD=parseInt(document.getElementById('lotDepth').value);
+  const lotW=parseInt(document.getElementById('lotWidth').value);
+  const eu=parseInt(document.getElementById('existingUnits').value);
+  const zd=document.getElementById('zoningDistrict').value;
+  const reqSetback=Math.min(30,lotD*0.24);// required rear setback, typically ~30ft
+  const maxCoachSqft=Math.round(reqSetback*0.60*lotW);
+  const maxConv=eu===1?1:Math.floor(eu*0.33+0.499); // round per ordinance: >=0.5 up, <0.5 down
+  const isCoach=type==='detached';
+  const isConv=!isCoach;
   const items=[];
-  if(isCoachHouse){
-    items.push({label:'Max floor area',val:Math.min(700,maxBySetback)+' sq ft',note:'Min of 700 sq ft cap and 60% × rear setback'});
-    items.push({label:'Max height',val:'22 ft',note:'Above grade, §17-9-0201-F'});
-    items.push({label:'Min separation',val:'15 ft',note:'To principal building (10 ft w/ adj. adjustment if lot < 125 ft)'});
-    items.push({label:'Your size vs. limit',val:sqft+(sqft>Math.min(700,maxBySetback)?' — OVER LIMIT':' — within limit'),note:''});
+  if(isCoach){
+    const overMax=sqft>maxCoachSqft;
+    items.push({l:'Max floor area',v:maxCoachSqft+' sq ft',n:'60% × '+Math.round(reqSetback)+'ft setback × '+lotW+'ft lot width (no absolute cap in ordinance)'});
+    items.push({l:'Max height',v:'22 ft',n:'Above grade, §17-9-0201-F'});
+    items.push({l:'Min separation',v:'15 ft',n:'To principal building; 10 ft possible via adj. adj. if lot <125 ft deep'});
+    items.push({l:'Alley setback',v:'2 ft / 10 ft CL',n:'From rear property line / from alley centerline'});
+    items.push({l:'Your size vs. limit',v:sqft+(overMax?' — EXCEEDS':'  — OK'),n:overMax?'Reduce unit size or verify lot dimensions':''});
+    if(eu>=5)items.push({l:'Coach house permitted?',v:'NO',n:'Not permitted when principal building has 5+ units (§17-9-0201-F(16))'});
+    document.getElementById('masNote').textContent=overMax?`⚠ Unit size (${sqft} sq ft) exceeds the estimated max (${maxCoachSqft} sq ft) for a ${lotW}×${lotD} ft lot. The 700 sq ft cap was removed — max is now 60% of the rear setback area. Verify with a licensed architect.`:(eu>=5?'⚠ Coach houses are not permitted when the principal building has 5 or more existing units.':'');
   }else{
-    items.push({label:'Max interior ADUs',val:maxConversions.toString(),note:'Based on '+existingUnits+' existing units × 33% formula'});
-    items.push({label:'Building age req.',val:'20+ years',note:'Principal building must be ≥20 yrs old, §17-2-0303-C'});
-    items.push({label:'Lot coverage',val:'Per zoning district',note:'Conversion units exempt from min. lot area rules'});
-    items.push({label:'Egress ceiling',val:'7 ft min.',note:'Basement: minimum 7 ft ceiling height required by code'});
+    items.push({l:'Max interior ADUs',v:maxConv.toString(),n:eu+' existing units × 33% formula (rounds per ordinance)'});
+    items.push({l:'Building age req.',v:'20+ years',n:'Principal building must be ≥20 yrs old (§17-2-0303-C)'});
+    items.push({l:'Min. ceiling ht.',v:'7 ft',n:'Required for habitable space in basement'});
+    items.push({l:'Parking relief',v:'Allowed',n:'Conversion units may be established without corresponding accessory parking'});
+    items.push({l:'Coach house also allowed?',v:'Yes',n:'As of April 1, 2026 — both types can coexist on same property'});
+    document.getElementById('masNote').textContent=(sqft>1200)?'⚠ Large conversion units may be constrained by existing floor plate and structural factors. Verify with a licensed architect.':'';
   }
-  document.getElementById('massingGrid').innerHTML=items.map(i=>`<div class="massing-item"><div class="mi-label">${i.label}</div><div class="mi-val">${i.val}</div>${i.note?`<div class="mi-note">${i.note}</div>`:''}</div>`).join('');
-  document.getElementById('massingNote').textContent=overLimit?`⚠ Your entered size (${sqft} sq ft) exceeds the 700 sq ft coach house limit. Reduce size or note this is a planning scenario only.`:(isCoachHouse&&sqft>maxBySetback?`⚠ Your entered size (${sqft} sq ft) may exceed the 60%-of-rear-setback limit on a ${lotDepth}-ft-deep lot (~${maxBySetback} sq ft max). Verify with a zoning professional.`:'');
+  document.getElementById('masGrid').innerHTML=items.map(i=>`<div class="masit"><div class="mill">${i.l}</div><div class="mivl">${i.v}</div>${i.n?'<div class="mint">'+i.n+'</div>':''}</div>`).join('');
 }
 
+// ===== PMT =====
 function pmt(r,n,pv){if(r===0)return pv/n;return r*pv/(1-Math.pow(1+r,-n))}
 
+// ===== MAIN CALC =====
 function calc(){
   const type=document.getElementById('aduType').value;
   const sqft=parseInt(document.getElementById('sqft').value);
-  const finish=document.getElementById('finish').value;
-  const siteCost=parseInt(document.getElementById('site').value);
-  const utilCost=parseInt(document.getElementById('utility').value);
+  const fin=document.getElementById('finish').value;
+  const site=parseInt(document.getElementById('site').value);
+  const util=parseInt(document.getElementById('utility').value);
   const softP=parseFloat(document.getElementById('soft').value);
   const contP=parseInt(document.getElementById('contingency').value)/100;
   const rent=parseInt(document.getElementById('rent').value);
@@ -711,69 +699,69 @@ function calc(){
   const mgmtP=parseFloat(document.getElementById('mgmt').value);
   const numAdus=parseInt(document.getElementById('numAdus').value);
 
-  const ratePerSqft=ADU[type][finish];
-  const baseHard=sqft*ratePerSqft;
-  const contingencyAmt=Math.round(baseHard*contP);
-  const hardCost=baseHard+contingencyAmt+siteCost+utilCost;
-  const softCost=Math.round(hardCost*softP);
-  const totalCost=Math.round(hardCost+softCost);
-  const effectiveGrant=Math.min(grantAmt,totalCost);
+  const baseHard=sqft*ADU[type][fin];
+  const contAmt=Math.round(baseHard*contP);
+  const hardTotal=baseHard+contAmt+site+util;
+  const soft=Math.round(hardTotal*softP);
+  const totalCost=Math.round(hardTotal+soft);
+  const effGrant=Math.min(grantAmt,totalCost);
 
-  let loanAmt=0;
-  let monthlyDebt=0;
+  // Loan — capped at total cost
+  let loanAmt=0,monthlyDebt=0;
   if(finTab==='heloc'){
     loanAmt=Math.min(parseInt(document.getElementById('helocAmt').value),totalCost);
-    const r=parseFloat(document.getElementById('helocRate').value)/100/12;
-    const n=parseInt(document.getElementById('helocTerm').value)*12;
+    const r=parseFloat(document.getElementById('helocRate').value)/100/12,n=parseInt(document.getElementById('helocTerm').value)*12;
     monthlyDebt=pmt(r,n,loanAmt);
+    // Clamp slider display
+    if(parseInt(document.getElementById('helocAmt').value)>totalCost){document.getElementById('helocAmt').value=totalCost;document.getElementById('haV').textContent='$'+totalCost.toLocaleString();}
   }else if(finTab==='refi'){
     loanAmt=Math.min(parseInt(document.getElementById('refiAmt').value),totalCost);
-    const r=parseFloat(document.getElementById('refiRate').value)/100/12;
-    const n=parseInt(document.getElementById('refiTerm').value)*12;
+    const r=parseFloat(document.getElementById('refiRate').value)/100/12,n=parseInt(document.getElementById('refiTerm').value)*12;
     monthlyDebt=pmt(r,n,loanAmt);
+    if(parseInt(document.getElementById('refiAmt').value)>totalCost){document.getElementById('refiAmt').value=totalCost;document.getElementById('raV').textContent='$'+totalCost.toLocaleString();}
   }else if(finTab==='construction'){
     loanAmt=Math.min(parseInt(document.getElementById('conAmt').value),totalCost);
     const r=parseFloat(document.getElementById('conPerm').value)/100/12;
     monthlyDebt=pmt(r,360,loanAmt);
+    if(parseInt(document.getElementById('conAmt').value)>totalCost){document.getElementById('conAmt').value=totalCost;document.getElementById('caV').textContent='$'+totalCost.toLocaleString();}
   }
 
-  // Out of pocket = total cost - grant - loan
-  const outOfPocket=Math.max(0,totalCost-effectiveGrant-loanAmt);
-
+  const outOfPocket=Math.max(0,totalCost-effGrant-loanAmt);
   const effRent=rent*(1-vacP);
-  const annEffRent=effRent*12;
+  const annEff=effRent*12;
   const annMgmt=Math.round(rent*12*mgmtP);
-  const annOpCost=maint+ins+tax+annMgmt;
+  const annOp=maint+ins+tax+annMgmt;
   const annDebt=Math.round(monthlyDebt*12);
-  const annCF=Math.round(annEffRent-annOpCost-annDebt);
+  const annCF=Math.round(annEff-annOp-annDebt);
   const monthlyCF=Math.round(annCF/12);
   const payback=annCF>0?Math.round(totalCost/annCF):null;
 
   document.getElementById('aduTypeNote').textContent=ADU[type].note;
 
-  const mClass=monthlyCF>200?'pos':monthlyCF<-200?'neg':'warn';
-  const pbText=payback&&payback<99?payback+' yrs':'N/A';
-  const pbClass=payback&&payback<15?'pos':payback&&payback<25?'warn':'neg';
-
-  // Metric labels for cost breakdown
-  const sqftLabel='~$'+Math.round(totalCost/sqft).toLocaleString()+'/sq ft';
+  const mc=monthlyCF>200?'pos':monthlyCF<-200?'neg':'warn';
+  const pb=payback&&payback<99?payback+' yrs':'N/A';
+  const pbc=payback&&payback<15?'pos':payback&&payback<25?'warn':'neg';
 
   document.getElementById('metricsGrid').innerHTML=`
-    <div class="metric"><div class="mlabel">Total project cost</div><div class="mval">$${totalCost.toLocaleString()}</div><div class="msub">${sqftLabel} est. · ${sqft} sq ft</div></div>
-    <div class="metric"><div class="mlabel">Cash needed upfront</div><div class="mval">$${outOfPocket.toLocaleString()}</div><div class="msub">${finTab==='cash'?'100% cash':'after grant'+( loanAmt>0?' + $'+loanAmt.toLocaleString()+' loan':'')}</div></div>
-    <div class="metric"><div class="mlabel">Monthly debt service</div><div class="mval">${monthlyDebt>0?'$'+Math.round(monthlyDebt).toLocaleString():'$0'}</div><div class="msub">financing payment only</div></div>
-    <div class="metric"><div class="mlabel">Effective monthly rent</div><div class="mval">$${Math.round(effRent).toLocaleString()}</div><div class="msub">${(vacP*100).toFixed(0)}% vacancy applied</div></div>
-    <div class="metric"><div class="mlabel">Net monthly cash flow</div><div class="mval ${mClass}">${monthlyCF>=0?'+':''}$${Math.abs(monthlyCF).toLocaleString()}</div><div class="msub">${(annCF>=0?'+':'')+'$'+Math.abs(annCF).toLocaleString()}/yr after all costs</div></div>
-    <div class="metric"><div class="mlabel">Simple payback</div><div class="mval ${pbClass}">${pbText}</div><div class="msub">years to recoup total cost</div></div>`;
+    <div class="met"><div class="ml">Total project cost</div><div class="mv">$${totalCost.toLocaleString()}</div><div class="ms">~$${Math.round(totalCost/sqft).toLocaleString()}/sq ft est. · ${sqft} sq ft</div></div>
+    <div class="met"><div class="ml">Cash needed upfront</div><div class="mv">$${outOfPocket.toLocaleString()}</div><div class="ms">${finTab==='cash'?'100% cash':'after grant'+(loanAmt>0?' + $'+loanAmt.toLocaleString()+' loan':'')}</div></div>
+    <div class="met"><div class="ml">Monthly debt service</div><div class="mv">${monthlyDebt>0?'$'+Math.round(monthlyDebt).toLocaleString():'$0'}</div><div class="ms">financing only</div></div>
+    <div class="met"><div class="ml">Effective monthly rent</div><div class="mv">$${Math.round(effRent).toLocaleString()}</div><div class="ms">${(vacP*100).toFixed(0)}% vacancy applied</div></div>
+    <div class="met"><div class="ml">Net monthly cash flow</div><div class="mv ${mc}">${monthlyCF>=0?'+':''}$${Math.abs(monthlyCF).toLocaleString()}</div><div class="ms">${(annCF>=0?'+':'')+'$'+Math.abs(annCF).toLocaleString()}/yr after all costs</div></div>
+    <div class="met"><div class="ml">Simple payback</div><div class="mv ${pbc}">${pb}</div><div class="ms">years to recoup total cost</div></div>`;
 
-  // Sources & Uses Chart
-  renderSU(baseHard,contingencyAmt,softCost,siteCost,utilCost,totalCost,outOfPocket,effectiveGrant,loanAmt);
+  // Sources & Uses
+  const usesD=[{l:'Base hard cost',v:baseHard,c:SC.hard},{l:'Contingency',v:contAmt,c:SC.cont},{l:'Site conditions',v:site,c:SC.site},{l:'Utility connection',v:util,c:SC.util},{l:'Soft costs',v:soft,c:SC.soft}].filter(d=>d.v>0);
+  const srcD=[{l:'Cash / equity',v:outOfPocket,c:SC.cash},{l:'Grant',v:effGrant,c:SC.grant},{l:'Financing',v:loanAmt,c:SC.loan}].filter(d=>d.v>0);
+  function stk(data,tot){return data.map(d=>{const p=Math.max(2,Math.round(d.v/tot*100));return`<div class="su-seg" style="height:${p}%;background:${d.c}" title="${d.l}: $${d.v.toLocaleString()}">${p>10?'$'+Math.round(d.v/1000)+'k':''}</div>`;}).join('');}
+  function leg(data){return`<div class="su-leg">${data.map(d=>`<span class="su-sw"><span class="su-dot" style="background:${d.c}"></span>${d.l}: $${Math.round(d.v/1000)}k</span>`).join('')}</div>`;}
+  document.getElementById('suChart').innerHTML=`<div><div class="su-col-lbl">Uses — total cost $${totalCost.toLocaleString()}</div><div class="su-stk">${stk(usesD,totalCost)}</div>${leg(usesD)}</div><div><div class="su-col-lbl">Sources — capital stack</div><div class="su-stk">${stk(srcD,totalCost)}</div>${leg(srcD)}</div>`;
 
   // Breakdown
   document.getElementById('breakdownTable').innerHTML=[
     ['Gross rental income','$'+Math.round(rent*12).toLocaleString()],
     ['Vacancy loss ('+Math.round(vacP*100)+'%)','−$'+Math.round(rent*12*vacP).toLocaleString()],
-    ['Effective gross income','$'+Math.round(annEffRent).toLocaleString()],
+    ['Effective gross income','$'+Math.round(annEff).toLocaleString()],
     ['Property tax increase','−$'+tax.toLocaleString()],
     ['Insurance add-on','−$'+ins.toLocaleString()],
     ['Maintenance reserve','−$'+maint.toLocaleString()],
@@ -785,31 +773,29 @@ function calc(){
   // Two-ADU
   if(numAdus===2){
     const beds=parseInt(document.getElementById('bedrooms').value);
-    const hhSize=getHHSize(beds);
-    const ami100=AMI4*HH_FACTORS[hhSize-1];
-    const ami60Income=ami100*0.60;
-    const amiRent60=Math.round(ami60Income*0.30/12);
-    const type2=document.getElementById('aduType2').value;
-    const sqft2=parseInt(document.getElementById('sqft2').value);
-    const hard2=sqft2*ADU[type2][finish]+siteCost*0.5+utilCost*0.5;
-    const total2=Math.round(hard2*(1+softP)*(1+contP));
-    const affordUnit=parseInt(document.getElementById('affordUnit').value);
-    const mktRent=affordUnit===2?rent:amiRent60;
-    const afdRent=affordUnit===2?amiRent60:rent;
-    document.getElementById('twoAduInfo').innerHTML=`60% AMI rent cap (${getBedLabel(beds)}, ${hhSize}-person HH): <strong>$${amiRent60.toLocaleString()}/mo.</strong> Unit ${affordUnit} must be rented at or below this level. This covenant is recorded with the Cook County Recorder of Deeds and runs for <strong>30 years</strong> (§2-44-106(i)). A $500 registration fee applies (§2-44-065).`+(rent>amiRent60?` Your market rent ($${rent.toLocaleString()}) exceeds the cap by $${(rent-amiRent60).toLocaleString()}/mo.`:'');
-    const annBothRent=(mktRent+afdRent)*(1-vacP)*12;
-    const annBothOp=annOpCost*1.5;
-    const annBothCF=Math.round(annBothRent-annBothOp-annDebt);
-    const mClass2=annBothCF>2400?'pos':annBothCF<-2400?'neg':'warn';
-    document.getElementById('twoAduMetrics').innerHTML=`
-      <div class="metric"><div class="mlabel">Combined project cost</div><div class="mval">$${(totalCost+total2).toLocaleString()}</div><div class="msub">both ADUs</div></div>
-      <div class="metric"><div class="mlabel">Market unit (Unit ${3-affordUnit})</div><div class="mval">$${mktRent.toLocaleString()}/mo</div><div class="msub">unrestricted</div></div>
-      <div class="metric"><div class="mlabel">Affordable unit (Unit ${affordUnit})</div><div class="mval warn">$${afdRent.toLocaleString()}/mo</div><div class="msub">capped at 60% AMI</div></div>
-      <div class="metric"><div class="mlabel">Combined net cash flow</div><div class="mval ${mClass2}">${annBothCF>=0?'+':''}$${Math.abs(Math.round(annBothCF/12)).toLocaleString()}/mo</div><div class="msub">both units, est.</div></div>`;
-    document.getElementById('twoAduBreakdown').innerHTML=[
-      ['Market unit gross income','$'+Math.round(mktRent*12).toLocaleString()],
-      ['Affordable unit gross income','$'+Math.round(afdRent*12).toLocaleString()],
-      ['Vacancy (both)','−$'+Math.round((mktRent+afdRent)*12*vacP).toLocaleString()],
+    const hh=getHH(beds);
+    const ami100=AMI4*HHF[hh-1];
+    const amiR60=Math.round(ami100*0.60*0.30/12);
+    const t2=document.getElementById('aduType2').value;
+    const s2=parseInt(document.getElementById('sqft2').value);
+    const h2=s2*ADU[t2][fin]+site*0.5+util*0.5;
+    const tc2=Math.round(h2*(1+softP)*(1+contP));
+    const au=parseInt(document.getElementById('affordUnit').value);
+    const mkt2=au===2?rent:amiR60,afd2=au===2?amiR60:rent;
+    document.getElementById('twoAduInfo').innerHTML=`60% AMI rent cap (${getBL(beds)}, ${hh}-person HH): <strong>$${amiR60.toLocaleString()}/mo.</strong> Unit ${au} must be rented at or below this. 30-year covenant recorded with Cook County Recorder (§2-44-106(i)). $500 registration fee (§2-44-065).`+(rent>amiR60?` Market rent ($${rent.toLocaleString()}) exceeds cap by $${(rent-amiR60).toLocaleString()}/mo.`:'');
+    const annBoth=(mkt2+afd2)*(1-vacP)*12;
+    const annBothOp=annOp*1.5;
+    const annBothCF=Math.round(annBoth-annBothOp-annDebt);
+    const mc2=annBothCF>2400?'pos':annBothCF<-2400?'neg':'warn';
+    document.getElementById('twoAduMets').innerHTML=`
+      <div class="met"><div class="ml">Combined cost</div><div class="mv">$${(totalCost+tc2).toLocaleString()}</div><div class="ms">both ADUs</div></div>
+      <div class="met"><div class="ml">Market unit ${3-au} rent</div><div class="mv">$${mkt2.toLocaleString()}/mo</div><div class="ms">unrestricted</div></div>
+      <div class="met"><div class="ml">Affordable unit ${au}</div><div class="mv warn">$${afd2.toLocaleString()}/mo</div><div class="ms">capped at 60% AMI</div></div>
+      <div class="met"><div class="ml">Combined cash flow</div><div class="mv ${mc2}">${annBothCF>=0?'+':''}$${Math.abs(Math.round(annBothCF/12)).toLocaleString()}/mo</div><div class="ms">both units est.</div></div>`;
+    document.getElementById('twoAduBD').innerHTML=[
+      ['Market unit income','$'+Math.round(mkt2*12).toLocaleString()],
+      ['Affordable unit income','$'+Math.round(afd2*12).toLocaleString()],
+      ['Vacancy (both)','−$'+Math.round((mkt2+afd2)*12*vacP).toLocaleString()],
       ['Operating costs (est.)','−$'+Math.round(annBothOp).toLocaleString()],
       ['Debt service',monthlyDebt>0?'−$'+Math.round(annDebt).toLocaleString():'$0'],
       ['Net annual cash flow',(annBothCF>=0?'+':'')+'$'+Math.abs(annBothCF).toLocaleString()],
@@ -818,125 +804,149 @@ function calc(){
   renderAMI(rent);
 }
 
-function renderSU(baseHard,contingency,soft,site,util,total,cash,grant,loan){
-  const usesData=[
-    {label:'Base hard cost',val:baseHard,color:SEG_COLORS.hardCost},
-    {label:'Contingency',val:contingency,color:SEG_COLORS.contingency},
-    {label:'Site conditions',val:site,color:SEG_COLORS.site},
-    {label:'Utility connection',val:util,color:SEG_COLORS.utility},
-    {label:'Soft costs',val:soft,color:SEG_COLORS.softCost},
-  ].filter(d=>d.val>0);
-
-  const sourcesData=[
-    {label:'Cash / equity',val:cash,color:SEG_COLORS.cash},
-    {label:'Grant',val:grant,color:SEG_COLORS.grant},
-    {label:'Financing',val:loan,color:SEG_COLORS.loan},
-  ].filter(d=>d.val>0);
-
-  function makeStack(data,total){
-    return data.map(d=>{
-      const pct=Math.max(2,Math.round(d.val/total*100));
-      const label=pct>10?'$'+Math.round(d.val/1000)+'k':'';
-      return `<div class="su-seg" style="height:${pct}%;background:${d.color}" title="${d.label}: $${d.val.toLocaleString()}">${label}</div>`;
-    }).join('');
-  }
-
-  function makeLegend(data){
-    return `<div class="su-leg">${data.map(d=>`<span class="su-swatch"><span class="su-dot" style="background:${d.color}"></span>${d.label}: $${Math.round(d.val/1000)}k</span>`).join('')}</div>`;
-  }
-
-  document.getElementById('sourcesUsesChart').innerHTML=`
-    <div>
-      <div class="su-col-label">Uses (total cost: $${total.toLocaleString()})</div>
-      <div class="su-stack" style="flex-direction:column-reverse">${makeStack(usesData,total)}</div>
-      ${makeLegend(usesData)}
-    </div>
-    <div>
-      <div class="su-col-label">Sources (capital stack)</div>
-      <div class="su-stack" style="flex-direction:column-reverse">${makeStack(sourcesData,total)}</div>
-      ${makeLegend(sourcesData)}
-    </div>`;
-}
-
+// ===== AMI =====
 function renderAMI(rent){
   const beds=parseInt(document.getElementById('bedrooms').value);
-  const hhSize=getHHSize(beds);
-  const ami100=AMI4*HH_FACTORS[hhSize-1];
+  const hh=getHH(beds);
+  const ami100=AMI4*HHF[hh-1];
   const pcts=[30,50,60,80,100,120];
-  const colors=['#1D9E75','#2D5A27','#4A8F42','#BA7517','#E24B4A','#993C1D'];
-
-  const hhLabel=hhSize+'-person household';
-  document.getElementById('amiReverseDesc').textContent=`Rents affordable (30% rule) for ${hhLabel} at each AMI level — Chicago Metro 2025:`;
-
+  const cols=['#1D9E75','#2D5A27','#4A8F42','#BA7517','#E24B4A','#993C1D'];
+  const hhlabel=hh+'-person household';
+  document.getElementById('amiRevDesc').textContent=`Rents affordable (30% rule) for a ${hhlabel} at each AMI level — Chicago Metro 2025:`;
   if(amiTab==='forward'){
-    const reqIncome=rent*12/0.30;
-    const amiPct=Math.round(reqIncome/ami100*100);
-    document.getElementById('amiForwardDesc').textContent=`At $${rent.toLocaleString()}/mo, a ${hhLabel} spending 30% of income on housing needs ~$${Math.round(reqIncome).toLocaleString()}/yr — approximately ${amiPct}% of Chicago's ${hhLabel} AMI ($${Math.round(ami100).toLocaleString()}).`;
+    const req=rent*12/0.30,pct=Math.round(req/ami100*100);
+    document.getElementById('amiFwdDesc').textContent=`At $${rent.toLocaleString()}/mo, a ${hhlabel} spending 30% of income needs ~$${Math.round(req).toLocaleString()}/yr — about ${pct}% of Chicago's ${hhlabel} AMI ($${Math.round(ami100).toLocaleString()}).`;
     document.getElementById('amiForwardBars').innerHTML=pcts.map((p,i)=>{
-      const aRent=Math.round(ami100*p/100*0.30/12);
-      const fits=rent<=aRent;
-      const w=Math.min(100,Math.round(aRent/4000*100));
-      return `<div class="ami-row"><span class="ami-label">${p}% AMI</span><div class="ami-track"><div class="ami-fill" style="width:${w}%;background:${fits?colors[i]:'#D8D4CB'};color:${fits?'#fff':'#8A8078'}">${fits?'affordable':''}</div></div><span class="ami-note">$${aRent.toLocaleString()}/mo cap</span></div>`;
+      const ar=Math.round(ami100*p/100*0.30/12),fits=rent<=ar,w=Math.min(100,Math.round(ar/4000*100));
+      return`<div class="amirow"><span class="amilbl">${p}% AMI</span><div class="amitrk"><div class="amifil" style="width:${w}%;background:${fits?cols[i]:'#D8D4CB'};color:${fits?'#fff':'#8A8078'}">${fits?'affordable':''}</div></div><span class="aminote">$${ar.toLocaleString()}/mo cap</span></div>`;
     }).join('');
     const served=pcts.filter((p,i)=>rent<=Math.round(ami100*p/100*0.30/12));
     const lowest=served.length>0?served[0]:null;
-    document.getElementById('amiForwardNote').innerHTML=lowest?`This rent is affordable to ${hhLabel} households at <strong>${lowest}% AMI</strong> and above.${lowest<=60?' <strong>This rent satisfies Chicago\'s 60% AMI affordability requirement for the two-ADU mandate (§2-44-106).</strong>':lowest<=80?' This rent could serve as affordable housing under standard policy definitions.':''}`:`At this rent level, the unit exceeds the 30% affordability threshold for all AMI bands shown. It serves market-rate renters but would not satisfy the city's affordability mandate.`;
+    document.getElementById('amiForwardNote').innerHTML=lowest?`This rent is affordable to ${hhlabel} households at <strong>${lowest}% AMI</strong> and above.${lowest<=60?' <strong>Satisfies Chicago\'s 60% AMI two-ADU mandate (§2-44-106).</strong>':lowest<=80?' Could qualify as affordable housing under standard program definitions.':''}`:`This rent exceeds the 30% affordability threshold for all AMI bands shown. It serves market-rate renters and would not satisfy the city's two-ADU affordability mandate.`;
   }else{
     document.getElementById('amiReverseBars').innerHTML=pcts.map((p,i)=>{
-      const aRent=Math.round(ami100*p/100*0.30/12);
-      const w=Math.min(100,Math.round(aRent/4000*100));
-      const fits=rent<=aRent;
-      return `<div class="ami-row"><span class="ami-label">${p}% AMI</span><div class="ami-track"><div class="ami-fill" style="width:${w}%;background:${colors[i]};color:#fff">$${aRent.toLocaleString()}/mo</div></div><span class="ami-note" style="color:${fits?'var(--accent)':'var(--text3)'}">${fits?'✓ fits':''}</span></div>`;
+      const ar=Math.round(ami100*p/100*0.30/12),w=Math.min(100,Math.round(ar/4000*100)),fits=rent<=ar;
+      return`<div class="amirow"><span class="amilbl">${p}% AMI</span><div class="amitrk"><div class="amifil" style="width:${w}%;background:${cols[i]};color:#fff">$${ar.toLocaleString()}/mo</div></div><span class="aminote" style="color:${fits?'var(--ac)':'var(--tx3)'}">${fits?'✓ fits':''}</span></div>`;
     }).join('');
   }
 }
 
+// ===== POLICY =====
+function nhAvgFmr(nh,bed){let t=0,c=0;nh.zips.forEach(z=>{if(SAFMR[z]){t+=SAFMR[z][bed];c++;}});return c>0?Math.round(t/c):0;}
+
 function policyCalc(){
   const type=document.getElementById('polAduType').value;
-  const finish=document.getElementById('polFinish').value;
+  const fin=document.getElementById('polFinish').value;
   const sqft=parseInt(document.getElementById('polSqft').value);
   const props=parseInt(document.getElementById('polProps').value);
   const adoptP=parseInt(document.getElementById('polAdopt').value)/100;
-  const grantP=parseInt(document.getElementById('polGrant').value)/100;
-  const typCost=Math.round((sqft*ADU[type][finish]+18000)*1.12*1.05);
-  const units=Math.round(props*adoptP);
-  const grantUnits=Math.round(units*grantP);
-  const totalInvest=Math.round(units*typCost/1e6);
-  const grantSpend=Math.round(grantUnits*40000/1e6);
-  const ami60Rent=Math.round(AMI4*0.80*0.60*0.30/12);
-  const amiUnits=Math.round(units*0.18);
-  document.getElementById('policyMetrics').innerHTML=`
-    <div class="metric"><div class="mlabel">Estimated new units</div><div class="mval pos">${units.toLocaleString()}</div><div class="msub">${(adoptP*100).toFixed(0)}% adoption rate</div></div>
-    <div class="metric"><div class="mlabel">Typical unit cost</div><div class="mval">$${typCost.toLocaleString()}</div><div class="msub">${sqft} sq ft · ${finish} · incl. contingency</div></div>
-    <div class="metric"><div class="mlabel">Total private investment</div><div class="mval">$${totalInvest}M</div><div class="msub">estimated capital deployed</div></div>
-    <div class="metric"><div class="mlabel">Grant program cost</div><div class="mval">$${grantSpend}M</div><div class="msub">${grantUnits.toLocaleString()} units @ avg $40k</div></div>
-    <div class="metric"><div class="mlabel">Est. affordable units</div><div class="mval warn">~${amiUnits.toLocaleString()}</div><div class="msub">at or below 80% AMI (est.)</div></div>
-    <div class="metric"><div class="mlabel">60% AMI rent cap (1BR)</div><div class="mval">$${ami60Rent.toLocaleString()}/mo</div><div class="msub">2-ADU affordability trigger</div></div>`;
+  const grantSize=parseInt(document.getElementById('polGrantSize').value);
+  const budgetM=parseInt(document.getElementById('polBudget').value);
+  const targetAmiP=parseFloat(document.getElementById('polTargetAmi').value);
+  const roiP=parseFloat(document.getElementById('polRoi').value)/100;
 
-  const bars=NHOODCLUSTERS.map(nh=>{
-    let t=0,c=0;
-    nh.zips.forEach(z=>{if(SAFMR[z]){t+=SAFMR[z][1];c++;}});
-    return{name:nh.name,fmr:c>0?Math.round(t/c):0,color:nh.color};
-  }).filter(b=>b.fmr>0).sort((a,b)=>b.fmr-a.fmr);
-  const maxFmr=bars[0].fmr;
-  document.getElementById('policyBarChart').innerHTML=bars.map(b=>{
+  const typCost=Math.round((sqft*ADU[type][fin]+18000)*1.12*1.05);
+  const units=Math.round(props*adoptP);
+  // Grant budget determines how many units receive grants
+  const grantBudget=budgetM*1e6;
+  const grantedUnits=Math.min(units,Math.floor(grantBudget/grantSize));
+  const totalInvest=Math.round(units*typCost/1e6);
+
+  // Subsidy gap: for a 1BR unit, what grant is needed so that AMI rent yields target ROI?
+  // Operating costs assumption: $7,200/yr (maintenance+insurance+tax), 7% vacancy
+  const annOp=7200,vacP=0.07;
+  const ami2=AMI4*HHF[1];// 2-person HH for 1BR
+  const pcts=[30,50,60,80];
+  // For each AMI level, compute the gap between market-rate and AMI rent, then the NPV of that income gap (simple: annualize over 20yr, discount not applied here — straightforward shortfall)
+  // Subsidy needed = totalCost - (PV of net income at AMI rent that gives roiP return)
+  // Simplified: grant = typCost - (AMI_rent*(1-vacP)*12 - annOp) / roiP
+  // (i.e., what lump sum makes the annualized return on REMAINING investment = roiP)
+
+  // Gap per neighborhood cluster for 1BR
+  const barData=NHCLUSTERS.map(nh=>({name:nh.name,fmr:nhAvgFmr(nh,1),color:nh.color})).filter(b=>b.fmr>0).sort((a,b)=>b.fmr-a.fmr);
+  const maxFmr=barData[0].fmr;
+
+  document.getElementById('policyMets').innerHTML=`
+    <div class="met"><div class="ml">Units built (all)</div><div class="mv pos">${units.toLocaleString()}</div><div class="ms">${(adoptP*100).toFixed(0)}% of eligible properties</div></div>
+    <div class="met"><div class="ml">Typical unit cost</div><div class="mv">$${typCost.toLocaleString()}</div><div class="ms">${sqft} sq ft · ${fin} · incl. contingency</div></div>
+    <div class="met"><div class="ml">Total private investment</div><div class="mv">$${totalInvest}M</div><div class="ms">est. capital deployed</div></div>
+    <div class="met"><div class="ml">Grant budget</div><div class="mv">$${budgetM}M</div><div class="ms">$${grantSize.toLocaleString()}/unit avg grant</div></div>
+    <div class="met"><div class="ml">Units receiving grants</div><div class="mv warn">${grantedUnits.toLocaleString()}</div><div class="ms">budget ÷ grant size</div></div>
+    <div class="met"><div class="ml">Target AMI level</div><div class="mv">${Math.round(targetAmiP*100)}%</div><div class="ms">affordability target for grant-linked units</div></div>`;
+
+  document.getElementById('polBarChart').innerHTML=barData.map(b=>{
     const w=Math.round(b.fmr/maxFmr*100);
-    const ami60=Math.round(AMI4*0.80*0.60*0.30/12);
-    const amiPctLabel='>'+Math.round(b.fmr*12/0.30/AMI4/HH_FACTORS[1]*100)+'% AMI';
-    return`<div class="bar-row"><span class="bar-label">${b.name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${b.color}"><span>$${b.fmr.toLocaleString()}</span></div></div><span class="bar-val" style="color:${b.fmr<=ami60?'var(--accent)':'var(--text3)'}">${b.fmr<=ami60?'≤60% AMI':amiPctLabel}</span></div>`;
+    const ami60=Math.round(ami2*0.60*0.30/12);
+    const amiPct=Math.round(b.fmr*12/0.30/ami2*100);
+    return`<div class="bar-row"><span class="bar-lbl">${b.name}</span><div class="bar-trk"><div class="bar-fil" style="width:${w}%;background:${b.color}"><span>$${b.fmr.toLocaleString()}</span></div></div><span class="bar-val" style="color:${b.fmr<=ami60?'var(--ac)':'var(--tx3)'}">${amiPct}% AMI</span></div>`;
   }).join('');
 
-  const pcts=[30,50,60,80,100];
-  const ami2=AMI4*HH_FACTORS[1];
-  document.getElementById('policyAmiTable').innerHTML=`<table class="assm-table"><thead><tr><th>AMI %</th><th>Annual income (2-person HH)</th><th>Max affordable rent (30% rule)</th><th>Neighborhood clusters at or below</th></tr></thead><tbody>${pcts.map(p=>{
-    const annInc=Math.round(ami2*p/100);
-    const maxRent=Math.round(annInc*0.30/12);
-    const nhCount=NHOODCLUSTERS.filter(nh=>{let t=0,c=0;nh.zips.forEach(z=>{if(SAFMR[z]){t+=SAFMR[z][1];c++;}});return c>0&&Math.round(t/c)<=maxRent;}).length;
-    return`<tr><td>${p}%</td><td>$${annInc.toLocaleString()}</td><td>$${maxRent.toLocaleString()}/mo</td><td style="color:${nhCount>0?'var(--accent)':'var(--text3)'}">${nhCount} of ${NHOODCLUSTERS.length}</td></tr>`;
-  }).join('')}</tbody></table>`;
+  // Subsidy gap chart — for each AMI level, how big a grant is needed at avg Chicago market cost?
+  // Formula: grantNeeded = typCost - [(amiRent*(1-vacP)*12 - annOp) / roiP]
+  // Capped at 0 (if AMI rent already yields target ROI no grant needed)
+  document.getElementById('subGapDesc').textContent=`For a typical ${sqft} sq ft ADU costing ~$${typCost.toLocaleString()}, how large a per-unit grant is needed so that a homeowner receiving the grant can rent at each AMI level and still earn a ${(roiP*100).toFixed(0)}% annual return on their remaining investment?`;
+
+  const gapData=pcts.map(p=>{
+    const amiRent=Math.round(ami2*p/100*0.30/12);
+    const annNetAtAmi=(amiRent*(1-vacP)*12)-annOp;
+    // Investment that annNetAtAmi supports at roiP return
+    const supportedInvestment=annNetAtAmi>0?Math.round(annNetAtAmi/roiP):0;
+    const gapNeeded=Math.max(0,typCost-supportedInvestment);
+    return{p,amiRent,gapNeeded,supportedInvestment};
+  });
+
+  const maxGap=Math.max(...gapData.map(d=>d.gapNeeded),1);
+  document.getElementById('subGapChart').innerHTML=gapData.map(d=>{
+    const w=Math.round(d.gapNeeded/maxGap*100);
+    const feasible=d.gapNeeded<=grantSize;
+    const grantCovers=Math.min(100,Math.round(grantSize/Math.max(d.gapNeeded,1)*100));
+    return`<div class="sgap-row">
+      <span class="sgap-lbl">${d.p}% AMI</span>
+      <div class="sgap-bar-wrap">
+        <div class="sgap-bar" style="width:${w}%;background:${feasible?'var(--ac)':'var(--da)'}">$${Math.round(d.gapNeeded/1000)}k gap</div>
+        ${d.gapNeeded>0?`<div style="position:absolute;top:0;left:${Math.round(grantSize/maxGap*100)}%;height:100%;width:2px;background:var(--gd);opacity:.8" title="Your grant size: $${grantSize.toLocaleString()}"></div>`:''}
+      </div>
+      <span class="sgap-note" style="color:${feasible?'var(--ac)':'var(--da)'}">${feasible?'✓ grant covers gap':'gap: $'+Math.round(d.gapNeeded/1000)+'k over budget'}</span>
+    </div>
+    <div style="font-size:11px;font-family:\'DM Mono\',monospace;color:var(--tx3);margin-bottom:.5rem;padding-left:79px">AMI rent: $${d.amiRent.toLocaleString()}/mo · supports $${d.supportedInvestment.toLocaleString()} investment at ${(roiP*100).toFixed(0)}% ROI target</div>`;
+  }).join('');
+
+  // Grant outcome panel — how many affordable units does the grant budget actually produce?
+  const afdByAmi=gapData.map(d=>{
+    const unitsGrantCanMake=d.gapNeeded>0?Math.min(grantedUnits,Math.floor(grantBudget/d.gapNeeded)):grantedUnits;
+    return{p:d.p,units:unitsGrantCanMake,gap:d.gapNeeded};
+  });
+  document.getElementById('grantOutcomePanel').innerHTML=`
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:.75rem">With a $${budgetM}M grant program at $${grantSize.toLocaleString()} per unit, <strong>${grantedUnits.toLocaleString()} units</strong> receive grants. Of those, here is how many can be made affordable at each AMI level (i.e., where the grant fully closes the subsidy gap so the owner earns ≥${(roiP*100).toFixed(0)}% ROI at the AMI rent):</p>
+    <table class="at">
+      <thead><tr><th>Target AMI</th><th>AMI rent cap (1BR, 2-person HH)</th><th>Subsidy gap / unit</th><th>Units grant budget can make affordable</th><th>Status at $${grantSize.toLocaleString()} grant</th></tr></thead>
+      <tbody>${afdByAmi.map(d=>`<tr>
+        <td>${d.p}% AMI</td>
+        <td>$${Math.round(ami2*d.p/100*0.30/12).toLocaleString()}/mo</td>
+        <td>${d.gap>0?'$'+d.gap.toLocaleString():'No gap — profitable at AMI rent'}</td>
+        <td>${d.gap>0?d.units.toLocaleString():'All '+grantedUnits.toLocaleString()+' (no subsidy needed)'}</td>
+        <td style="color:${d.gap<=grantSize?'var(--ac)':'var(--da)'}">${d.gap<=grantSize?'✓ grant size sufficient':'Grant too small by $'+Math.round((d.gap-grantSize)/1000)+'k/unit'}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+
+  document.getElementById('subGapNote').innerHTML=`The gold line on each bar shows your $${grantSize.toLocaleString()} grant size. Bars shorter than the line can be made affordable with that grant. Longer bars require a larger per-unit subsidy. Assumptions: ${sqft} sq ft unit, $${typCost.toLocaleString()} total cost, ${(roiP*100).toFixed(0)}% target ROI, 7% vacancy, $7,200/yr operating costs (maintenance, insurance, property tax), 2-person household size for 1BR unit. Adjust the ROI target slider — lower ROI expectations dramatically reduce the subsidy gap needed. <a href="https://www.chicago.gov/areamedianincome" target="_blank">Chicago AMI chart →</a>`;
+
+  // AMI table
+  const ami2v=AMI4*HHF[1];
+  document.getElementById('polAmiTable').innerHTML=`<table class="at">
+    <thead><tr><th>AMI %</th><th>Annual income (2-person HH)</th><th>Max affordable rent (30% rule)</th><th>Neighborhood clusters at or below (1-BR SAFMR)</th></tr></thead>
+    <tbody>${[30,50,60,80,100].map(p=>{
+      const annI=Math.round(ami2v*p/100),maxR=Math.round(annI*0.30/12);
+      const nhC=NHCLUSTERS.filter(nh=>nhAvgFmr(nh,1)<=maxR).length;
+      return`<tr><td>${p}%</td><td>$${annI.toLocaleString()}</td><td>$${maxR.toLocaleString()}/mo</td><td style="color:${nhC>0?'var(--ac)':'var(--tx3)'}">${nhC} of ${NHCLUSTERS.length}</td></tr>`;
+    }).join('')}</tbody></table>`;
 }
 
-window.addEventListener('load',()=>{updateMassing();calc();});
+window.addEventListener('load',()=>{
+  updateMassing();
+  calc();
+  if(getRentcastKey())document.getElementById('rentcastKey').value=getRentcastKey();
+});
 </script>
 </body>
 </html>
