@@ -110,7 +110,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
 <header class="hdr">
   <div>
     <h1>Chicago <em>ADU</em> Financial Calculator</h1>
-    <p class="hdr-sub">Draft tool developed by James Yelen, April 2026</p>
+    <p class="hdr-sub">Draft tool developed by James Yelen · Last updated April 14, 2026</p>
   </div>
   <div class="nav">
     <button class="nb on" id="btnHomeowner" onclick="setMode('homeowner')">Homeowner</button>
@@ -284,11 +284,25 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
   <div id="fpCash"><div class="ibox">Paying cash avoids interest and maximizes day-one cash flow. Best for owners with substantial savings and a low-rate existing mortgage they don't want to disturb. No monthly debt service.</div></div>
   <div id="fpHeloc" class="gone">
     <div class="g3">
-      <div class="fld"><label>Loan amount <span class="v" id="haV">$200,000</span></label><input type="range" min="25000" max="400000" step="5000" value="200000" id="helocAmt" oninput="syncLoan('helocAmt','haV');calc()"></div>
+      <div class="fld"><label>Loan amount <span class="v" id="haV">$150,000</span></label><input type="range" min="25000" max="400000" step="5000" value="150000" id="helocAmt" oninput="syncLoan('helocAmt','haV');calc()"></div>
       <div class="fld"><label>Interest rate <span class="v" id="hrV">7.50%</span></label><input type="range" min="5" max="12" step="0.25" value="7.5" id="helocRate" oninput="document.getElementById('hrV').textContent=Number(this.value).toFixed(2)+'%';calc()"></div>
-      <div class="fld"><label>Term <span class="v" id="htV">15 yr</span></label><input type="range" min="5" max="30" step="5" value="15" id="helocTerm" oninput="document.getElementById('htV').textContent=this.value+' yr';calc()"></div>
+      <div class="fld">
+        <label>Product type</label>
+        <select id="helocType" onchange="calc()">
+          <option value="heloc_io">HELOC — interest-only draw period</option>
+          <option value="heloc_full">HELOC — fully amortizing (repayment phase)</option>
+          <option value="heloan">Home equity loan — fixed, fully amortizing</option>
+        </select>
+      </div>
     </div>
-    <div class="ibox">HELOCs use home equity as collateral — lenders typically cap combined LTV at 80–85%. ADU projects are tricky: the loan must be sized on <em>pre-construction</em> equity since the ADU's added value won't be appraised until after completion. Variable rates are common. The loan amount is capped at total project cost.</div>
+    <div class="g2" id="helocTermRow">
+      <div class="fld"><label>Draw period (yrs) <span class="v" id="htV">10 yr</span></label><input type="range" min="5" max="10" step="1" value="10" id="helocDraw" oninput="document.getElementById('htV').textContent=this.value+' yr';calc()"></div>
+      <div class="fld"><label>Repayment period (yrs) <span class="v" id="hrpV">20 yr</span></label><input type="range" min="5" max="25" step="1" value="20" id="helocRepay" oninput="document.getElementById('hrpV').textContent=this.value+' yr';calc()"></div>
+    </div>
+    <div id="helocTermHELoan" class="gone">
+      <div class="fld" style="max-width:33%"><label>Loan term <span class="v" id="htLV">15 yr</span></label><input type="range" min="5" max="20" step="1" value="15" id="helocTerm" oninput="document.getElementById('htLV').textContent=this.value+' yr';calc()"></div>
+    </div>
+    <div class="ibox" id="helocNote"></div>
   </div>
   <div id="fpRefi" class="gone">
     <div class="g3">
@@ -378,7 +392,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
 <div id="policyMode" class="gone">
 <div class="pnl">
   <div class="plbl">Neighborhood &amp; citywide impact explorer</div>
-  <p style="font-size:14px;color:var(--tx2);margin-bottom:1.1rem">Model ADU development impacts under the 2026 ordinance</p>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:1.1rem">Model ADU development impact under the permanent ordinance (SO2024-0008918, eff. April 1, 2026).</p>
   <div class="g3" style="margin-bottom:.9rem">
     <div class="fld"><label>ADU type modeled</label><select id="polAduType" onchange="policyCalc()"><option value="basement">Basement conversion</option><option value="detached" selected>Coach house (detached)</option><option value="garage">Garage conversion</option></select></div>
     <div class="fld"><label>Finish level</label><select id="polFinish" onchange="policyCalc()"><option value="basic">Basic</option><option value="mid" selected>Mid-range</option><option value="high">High-end</option></select></div>
@@ -750,9 +764,26 @@ function calc(){
   let loanAmt=0,monthlyDebt=0;
   if(finTab==='heloc'){
     loanAmt=Math.min(parseInt(document.getElementById('helocAmt').value),totalCost);
-    const r=parseFloat(document.getElementById('helocRate').value)/100/12,n=parseInt(document.getElementById('helocTerm').value)*12;
-    monthlyDebt=pmt(r,n,loanAmt);
-    // Clamp slider display
+    const rate=parseFloat(document.getElementById('helocRate').value)/100;
+    const helocProd=document.getElementById('helocType').value;
+    // Show/hide the right term rows
+    document.getElementById('helocTermRow').classList.toggle('gone', helocProd==='heloan');
+    document.getElementById('helocTermHELoan').classList.toggle('gone', helocProd!=='heloan');
+    if(helocProd==='heloc_io'){
+      // Interest-only during draw period — payment = principal × monthly rate
+      monthlyDebt=loanAmt*(rate/12);
+      document.getElementById('helocNote').innerHTML=`During the draw period (${document.getElementById('helocDraw').value} yrs), payments are <strong>interest-only</strong>: $${Math.round(monthlyDebt).toLocaleString()}/mo at ${rate*100}%. At the end of the draw period, the full balance rolls into a ${document.getElementById('helocRepay').value}-yr repayment phase — monthly payments jump to <strong>$${Math.round(pmt(rate/12,parseInt(document.getElementById('helocRepay').value)*12,loanAmt)).toLocaleString()}/mo</strong>. Cash flow shown uses the draw-period (interest-only) payment. HELOCs typically have variable rates; the rate above is the current estimate. Lenders cap combined LTV at 80–85%.`;
+    }else if(helocProd==='heloc_full'){
+      // Modeling the repayment phase — fully amortizing over repayment period
+      const n=parseInt(document.getElementById('helocRepay').value)*12;
+      monthlyDebt=pmt(rate/12,n,loanAmt);
+      document.getElementById('helocNote').innerHTML=`Modeling the <strong>repayment phase</strong> of a HELOC: balance of $${loanAmt.toLocaleString()} amortizes fully over ${document.getElementById('helocRepay').value} years at ${rate*100}%. This is the higher payment that kicks in after the draw period ends. Use the interest-only option to model draw-period cash flow.`;
+    }else{
+      // Home equity loan — fixed rate, fully amortizing from day one
+      const n=parseInt(document.getElementById('helocTerm').value)*12;
+      monthlyDebt=pmt(rate/12,n,loanAmt);
+      document.getElementById('helocNote').innerHTML=`A <strong>home equity loan</strong> (sometimes called a second mortgage) is a fixed-rate, closed-end loan that amortizes fully from origination — no draw period, predictable payment of $${Math.round(monthlyDebt).toLocaleString()}/mo for ${document.getElementById('helocTerm').value} years. Unlike a HELOC, the rate and payment don't change. Lenders cap combined LTV at 80–85%; ADU projects are tricky since the appraised value won't reflect the ADU until after construction.`;
+    }
     if(parseInt(document.getElementById('helocAmt').value)>totalCost){document.getElementById('helocAmt').value=totalCost;document.getElementById('haV').textContent='$'+totalCost.toLocaleString();}
   }else if(finTab==='refi'){
     loanAmt=Math.min(parseInt(document.getElementById('refiAmt').value),totalCost);
@@ -774,7 +805,11 @@ function calc(){
   const annDebt=Math.round(monthlyDebt*12);
   const annCF=Math.round(annEff-annOp-annDebt);
   const monthlyCF=Math.round(annCF/12);
-  const payback=annCF>0?Math.round(totalCost/annCF):null;
+  // Payback: recover out-of-pocket cash invested. If there's a loan, also need to account
+  // for the outstanding loan principal — use total cash invested + remaining loan at payback point.
+  // Simplified: payback = outOfPocket / annCF (years of net cash flow to recover cash equity).
+  // Grant is treated as non-repayable, so it reduces the amount that needs to be recouped.
+  const payback=annCF>0?Math.round(outOfPocket/annCF):null;
 
   document.getElementById('aduTypeNote').textContent=ADU[type].note;
 
@@ -782,13 +817,24 @@ function calc(){
   const pb=payback&&payback<99?payback+' yrs':'N/A';
   const pbc=payback&&payback<15?'pos':payback&&payback<25?'warn':'neg';
 
+  // Cash upfront sub-label
+  const cashSubParts=[];
+  if(effGrant>0) cashSubParts.push('after $'+effGrant.toLocaleString()+' grant');
+  if(loanAmt>0) cashSubParts.push('$'+loanAmt.toLocaleString()+' financed');
+  const cashSub=cashSubParts.length>0?cashSubParts.join(' · '):'100% cash, no grant';
+
+  // Payback sub-label
+  const pbSub=effGrant>0
+    ? 'yrs to recoup cash invested (grant non-repayable)'
+    : 'years to recoup cash invested';
+
   document.getElementById('metricsGrid').innerHTML=`
     <div class="met"><div class="ml">Total project cost</div><div class="mv">$${totalCost.toLocaleString()}</div><div class="ms">~$${Math.round(totalCost/sqft).toLocaleString()}/sq ft est. · ${sqft} sq ft</div></div>
-    <div class="met"><div class="ml">Cash needed upfront</div><div class="mv">$${outOfPocket.toLocaleString()}</div><div class="ms">${finTab==='cash'?'100% cash':'after grant'+(loanAmt>0?' + $'+loanAmt.toLocaleString()+' loan':'')}</div></div>
+    <div class="met"><div class="ml">Cash needed upfront</div><div class="mv">$${outOfPocket.toLocaleString()}</div><div class="ms">${cashSub}</div></div>
     <div class="met"><div class="ml">Monthly debt service</div><div class="mv">${monthlyDebt>0?'$'+Math.round(monthlyDebt).toLocaleString():'$0'}</div><div class="ms">financing only</div></div>
     <div class="met"><div class="ml">Effective monthly rent</div><div class="mv">$${Math.round(effRent).toLocaleString()}</div><div class="ms">${(vacP*100).toFixed(0)}% vacancy applied</div></div>
     <div class="met"><div class="ml">Net monthly cash flow</div><div class="mv ${mc}">${monthlyCF>=0?'+':''}$${Math.abs(monthlyCF).toLocaleString()}</div><div class="ms">${(annCF>=0?'+':'')+'$'+Math.abs(annCF).toLocaleString()}/yr after all costs</div></div>
-    <div class="met"><div class="ml">Simple payback</div><div class="mv ${pbc}">${pb}</div><div class="ms">years to recoup total cost</div></div>`;
+    <div class="met"><div class="ml">Simple payback</div><div class="mv ${pbc}">${pb}</div><div class="ms">${pbSub}</div></div>`;
 
   // Sources & Uses
   const usesD=[{l:'Base hard cost',v:baseHard,c:SC.hard},{l:'Contingency',v:contAmt,c:SC.cont},{l:'Site conditions',v:site,c:SC.site},{l:'Utility connection',v:util,c:SC.util},{l:'Soft costs',v:soft,c:SC.soft}].filter(d=>d.v>0);
