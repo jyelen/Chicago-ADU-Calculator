@@ -110,7 +110,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
 <header class="hdr">
   <div>
     <h1>Chicago <em>ADU</em> Financial Calculator</h1>
-    <p class="hdr-sub">Working draft created by James Yelen, April 2026</p>
+    <p class="hdr-sub">Draft tool developed by James Yelen, April 2026</p>
   </div>
   <div class="nav">
     <button class="nb on" id="btnHomeowner" onclick="setMode('homeowner')">Homeowner</button>
@@ -150,7 +150,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
       <input type="range" min="500" max="4000" step="25" value="1600" id="rent" oninput="onRentSlide()">
     </div>
   </div>
-  <div class="dnote" id="rentSourceNote">Enter your ZIP to load HUD FY2025 Small Area FMR (40th-percentile gross rent benchmark) and Rentcast market-rate median for this ZIP. SAFMRs are rent benchmarks published annually by HUD in select geographies, including for Chicago ZIP codes. This is not a subsidy; it's a market data point used in affordability calculations. Accessing Rentcast data requires creating an account and obtaining an API key. Both are loaded automatically when a valid ZIP is entered.</div>
+  <div class="dnote" id="rentSourceNote">Enter your ZIP to load HUD FY2026 Small Area FMR (40th-percentile gross rent benchmark). Once you have your Bridge Interactive API key, enter it in the Assumptions tab to also load Zillow ZORI typical market rent for this ZIP.</div>
 </div>
 
 <div class="pnl">
@@ -307,15 +307,15 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
     <div class="ibox">Construction loans are short-term (12–18 months), interest-only during build, then convert to permanent financing. Rates carry a risk premium. ADU-specific lending products are limited in Chicago. Loan amount is capped at total project cost.</div>
   </div>
   <hr>
-  <div class="togrow">
-    <span class="toglbl">NHS Chicago / City grant</span>
-    <div class="pgrp">
-      <button class="pil" id="grantNo" onclick="setGrant(0,this)">No grant</button>
-      <button class="pil on" id="grantPart" onclick="setGrant(40000,this)">$40k partial</button>
-      <button class="pil" id="grantFull" onclick="setGrant(75000,this)">$75k max</button>
+  <div class="fld" style="margin-top:.25rem">
+    <label>Grant / subsidy amount <span class="v" id="grantDisp">$40,000</span></label>
+    <input type="range" min="0" max="85000" step="1000" value="40000" id="grantSlider" oninput="onGrantSlide()">
+    <div style="display:flex;justify-content:space-between;font-size:10px;font-family:'DM Mono',monospace;color:var(--tx3);margin-top:2px">
+      <span>$0 (no grant)</span>
+      <span>$10k planning + $75k construction (NHS max)</span>
     </div>
   </div>
-  <div class="ibox" style="font-size:11px">NHS Chicago offered up to $10k (planning) + $75k (construction, 5-year forgivable loan) for income-eligible households. Program is <strong>currently paused</strong> — check <a href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">nhschicago.org</a>. Cook County homeowners may qualify for a <strong>Home Improvement Exemption</strong> deferring tax increases for up to 4 years (auto-applied by Assessor from building permits).</div>
+  <div class="ibox" style="font-size:11px">NHS Chicago offered up to <strong>$10k</strong> (planning grant) + <strong>$75k</strong> (construction, as a 5-year forgivable loan) for income-eligible households — a maximum of $85k total. Program is <strong>currently paused</strong> — check <a href="https://nhschicago.org/additional-dwelling-unit-manual/" target="_blank">nhschicago.org</a> for updates. The slider above reflects any grant or subsidy amount; use $0 for no assistance, up to $85k for the NHS maximum, or any value in between to model a partial award or alternative program. Cook County homeowners may also qualify for a <strong>Home Improvement Exemption</strong> deferring property tax increases for up to 4 years (applied automatically by the Assessor's Office from building permits).</div>
 </div>
 
 <div class="pnl">
@@ -360,7 +360,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
   <div id="amiReverse" class="gone">
     <p style="font-size:13px;color:var(--tx2);margin-bottom:.65rem" id="amiRevDesc"></p>
     <div id="amiReverseBars"></div>
-    <div class="ibox" style="font-size:12px;margin-top:.65rem">Affordability = 30% of gross income on housing. Chicago-Naperville-Joliet Metro 2025 AMI (4-person) ≈ $115,700. <a href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart →</a></div>
+    <div class="ibox" style="font-size:12px;margin-top:.65rem">Affordability = 30% of gross income on housing. Income limits from City of Chicago Department of Housing 2025 published schedule (Chicago-Naperville-Joliet HUD Metro FMR Area, effective April 1, 2025). Key benchmarks: 1-person HH 100% AMI = $84,000 · 2-person = $96,000 · 3-person = $108,000 · 4-person = $119,900. <a href="https://www.chicago.gov/areamedianincome" target="_blank">City of Chicago AMI chart →</a></div>
   </div>
   <hr>
   <div class="rgrd">
@@ -378,7 +378,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
 <div id="policyMode" class="gone">
 <div class="pnl">
   <div class="plbl">Neighborhood &amp; citywide impact explorer</div>
-  <p style="font-size:14px;color:var(--tx2);margin-bottom:1.1rem">Model ADU development impacts under the 2026 ordinance.</p>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:1.1rem">Model ADU development impacts under the 2026 ordinance</p>
   <div class="g3" style="margin-bottom:.9rem">
     <div class="fld"><label>ADU type modeled</label><select id="polAduType" onchange="policyCalc()"><option value="basement">Basement conversion</option><option value="detached" selected>Coach house (detached)</option><option value="garage">Garage conversion</option></select></div>
     <div class="fld"><label>Finish level</label><select id="polFinish" onchange="policyCalc()"><option value="basic">Basic</option><option value="mid" selected>Mid-range</option><option value="high">High-end</option></select></div>
@@ -458,17 +458,19 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
   <table class="at">
     <thead><tr><th>Data source</th><th>What it represents</th><th>How used in this tool</th></tr></thead>
     <tbody>
-      <tr><td>HUD SAFMR (FY2025)</td><td>40th-percentile gross rent (utilities included) for standard-quality, recently-rented units by ZIP code. Published annually by HUD. Mandatory SAFMR area for Chicago (METRO16980M16980).</td><td>Loaded as "HUD FMR" reference point when ZIP is entered. Anchors affordability calculations.</td></tr>
-      <tr><td>Rentcast Market API</td><td>Median listed rental price aggregated from active listings by ZIP and bedroom count. Updated daily. Free tier: 50 calls/month.</td><td>Fetched live when ZIP is entered and displayed as "market median" — the asking rent landlords are currently listing. Requires a Rentcast API key entered by the user.</td></tr>
+      <tr><td>HUD SAFMR (FY2026, est.)</td><td>40th-percentile gross rent (utilities included) for standard-quality, recently-rented units by ZIP code. Published annually by HUD. FY2026 effective October 1, 2025. Values in this tool are estimated from the FY2025 base by applying the documented metro-level adjustment factor (~6.2%).</td><td>Loaded automatically when ZIP is entered. Anchors affordability calculations. Update annually from the official HUD SAFMR Excel file.</td></tr>
+      <tr><td>Zillow ZORI (via Bridge Interactive API)</td><td>Zillow Observed Rent Index — smoothed, repeat-rent measure of typical market-rate asking rents (40th–60th percentile), weighted to the rental housing stock. Available at ZIP level. <strong>Note: ZORI is not bedroom-stratified</strong> — it returns a single all-bedrooms typical rent for the ZIP, not bedroom-specific figures.</td><td>Fetched live when a ZIP is entered and a Bridge API key is present. Displayed as a context reference alongside HUD FMR. Not used in the financial model directly — it is a market orientation data point.</td></tr>
     </tbody>
   </table>
-  <div class="wbox" style="font-size:12px;margin-top:.5rem">Rentcast API access: Rentcast offers 50 free API calls/month on their free plan. To enable live market rent data, enter your Rentcast API key below. The key is stored only in your browser session and never sent anywhere except directly to api.rentcast.io.<br><br>
-  <div style="display:flex;gap:8px;align-items:center;margin-top:.4rem;flex-wrap:wrap">
-    <input type="text" id="rentcastKey" placeholder="Your Rentcast API key (optional)" style="flex:1;min-width:200px;font-size:12px;font-family:'DM Mono',monospace">
-    <button onclick="saveRentcastKey()" style="padding:6px 14px;background:var(--wa);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:12px">Save key &amp; reload</button>
-    <a href="https://www.rentcast.io/api" target="_blank" style="font-size:11px;color:var(--wa)">Get a free key →</a>
+  <div class="wbox" style="font-size:12px;margin-top:.5rem">
+    <strong>Zillow ZORI via Bridge Interactive API key:</strong> Request access at <a href="https://www.bridgeinteractive.com/developers/zillow-group-data/" target="_blank">bridgeinteractive.com/developers/zillow-group-data/</a>. No charge for approved access. Once approved, enter your key below — it is stored only in your browser's localStorage and sent only to api.bridgedataoutput.com.<br><br>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:.5rem;flex-wrap:wrap">
+      <input type="text" id="bridgeKeyInput" placeholder="Bridge Interactive API key" style="flex:1;min-width:200px;font-size:12px;font-family:'DM Mono',monospace">
+      <button onclick="saveBridgeKey()" style="padding:6px 14px;background:var(--wa);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:12px">Save &amp; apply</button>
+      <span id="bridgeKeySaved" style="font-size:12px;color:var(--ac)"></span>
+    </div>
   </div>
-  </div>
+  <div class="ibox" style="font-size:12px;margin-top:.5rem">To update HUD SAFMR data to exact FY2026 values: download the Small Area FMR Excel file from <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">huduser.gov/portal/datasets/fmr/smallarea/index.html</a>, filter for the Chicago-Naperville-Joliet metro (METRO16980M16980), and replace the SAFMR data object in this file's script tag. The current embedded values are FY2025 base × 1.062 metro adjustment factor (FY2026 Federal Register Notice, 90 FR 41096).</div>
 </div>
 <div class="pnl">
   <div class="plbl">AMI &amp; rent limit methodology</div>
@@ -478,15 +480,20 @@ hr{border:none;border-top:1px solid var(--bd);margin:1.1rem 0}
 </div><!-- end assumptionsMode -->
 
 <div class="tft">
-  <p>Permanent ADU Ordinance SO2024-0008918 · Effective April 1, 2026 · HUD FY2025 SAFMR · Chicago-Naperville-Joliet Metro</p>
-  <p style="margin-top:3px">Estimates for planning purposes only. Not legal, financial, or tax advice. · <a href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago DOH ADU</a> · <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD SAFMR</a> · <a href="https://developers.rentcast.io/" target="_blank">Rentcast API</a></p>
+  <p>Permanent ADU Ordinance SO2024-0008918 · Effective April 1, 2026 · HUD FY2026 SAFMR (est.) · Chicago-Naperville-Joliet Metro</p>
+  <p style="margin-top:3px">Estimates for planning purposes only. Not legal, financial, or tax advice. · <a href="https://www.chicago.gov/city/en/sites/additional-dwelling-units-ordinance/home.html" target="_blank">Chicago DOH ADU</a> · <a href="https://www.huduser.gov/portal/datasets/fmr/smallarea/index.html" target="_blank">HUD SAFMR</a> · <a href="https://www.bridgeinteractive.com/developers/zillow-group-data/" target="_blank">Zillow ZORI via Bridge Interactive</a></p>
 </div>
 
 </div><!-- wrap -->
 
 <script>
-// ===== HUD FY2025 SAFMR DATA =====
-const SAFMR={'60601':[2030,2170,2450,3150,3700],'60602':[2030,2170,2450,3150,3700],'60603':[2030,2170,2450,3150,3700],'60604':[2030,2170,2450,3150,3700],'60605':[1980,2120,2390,3070,3610],'60606':[2030,2170,2450,3150,3700],'60607':[1870,2000,2260,2900,3410],'60608':[1100,1170,1320,1700,1990],'60609':[960,1030,1160,1490,1750],'60610':[2230,2390,2700,3470,4080],'60611':[2610,2790,3150,4050,4760],'60612':[960,1030,1160,1490,1750],'60613':[1870,2000,2260,2900,3410],'60614':[2280,2440,2750,3540,4150],'60615':[1170,1250,1410,1810,2130],'60616':[1480,1580,1780,2290,2690],'60617':[960,1030,1160,1490,1750],'60618':[1440,1540,1740,2230,2620],'60619':[960,1030,1160,1490,1750],'60620':[860,920,1040,1340,1570],'60621':[840,900,1010,1300,1530],'60622':[1870,2000,2260,2900,3410],'60623':[870,930,1050,1350,1580],'60624':[870,930,1050,1350,1580],'60625':[1440,1540,1740,2230,2620],'60626':[1390,1490,1680,2160,2540],'60628':[860,920,1040,1340,1570],'60629':[870,930,1050,1350,1580],'60630':[1260,1350,1520,1950,2290],'60631':[1320,1410,1590,2040,2400],'60632':[870,930,1050,1350,1580],'60633':[910,970,1100,1410,1660],'60634':[1130,1210,1370,1760,2060],'60636':[840,900,1010,1300,1530],'60637':[1100,1170,1320,1700,1990],'60638':[930,1000,1130,1450,1700],'60639':[870,930,1050,1350,1580],'60640':[1590,1700,1920,2470,2900],'60641':[1130,1210,1370,1760,2060],'60642':[1960,2100,2370,3040,3580],'60643':[1050,1120,1270,1630,1910],'60644':[870,930,1050,1350,1580],'60645':[1430,1530,1730,2220,2610],'60646':[1390,1490,1680,2160,2540],'60647':[1730,1850,2090,2690,3160],'60649':[960,1030,1160,1490,1750],'60651':[870,930,1050,1350,1580],'60652':[870,930,1050,1350,1580],'60653':[1110,1190,1340,1720,2020],'60654':[2280,2440,2750,3540,4150],'60655':[1100,1170,1320,1700,1990],'60656':[1180,1260,1420,1830,2150],'60657':[2030,2170,2450,3150,3700],'60659':[1390,1490,1680,2160,2540],'60660':[1480,1580,1780,2290,2690],'60661':[2030,2170,2450,3150,3700],'60004':[1810,1930,2180,2800,3290],'60016':[1520,1630,1840,2360,2780],'60056':[1550,1660,1870,2400,2820],'60076':[1580,1690,1910,2450,2880],'60077':[1490,1590,1800,2310,2720],'60091':[2100,2240,2530,3250,3820],'60201':[1960,2100,2370,3040,3580],'60202':[1750,1870,2110,2710,3180],'60203':[2050,2200,2480,3190,3740],'60025':[1720,1840,2080,2670,3140],'60104':[1230,1320,1490,1910,2250],'60130':[1370,1460,1650,2120,2490],'60153':[1230,1310,1480,1900,2230],'60155':[1160,1240,1400,1800,2110]};
+// ===== HUD FY2026 SAFMR DATA — Cook County, IL =====
+// FY2026 effective October 1, 2025. Chicago-Naperville-Joliet Metro (METRO16980M16980).
+// Values derived by applying the FY2026 metro-level adjustment factor (~6.2% average increase
+// over FY2025) to ZIP-level FY2025 SAFMRs, rounded to nearest $10.
+// Source: HUD FY2026 FMR Federal Register Notice (90 FR 41096, Aug 22, 2025) + FY2025 base data.
+// Update annually from the HUD SAFMR Excel file at huduser.gov/portal/datasets/fmr/smallarea/index.html
+const SAFMR={'60601':[2160,2310,2600,3340,3930],'60602':[2160,2310,2600,3340,3930],'60603':[2160,2310,2600,3340,3930],'60604':[2160,2310,2600,3340,3930],'60605':[2100,2250,2540,3260,3830],'60606':[2160,2310,2600,3340,3930],'60607':[1990,2120,2400,3080,3620],'60608':[1170,1250,1400,1800,2110],'60609':[1020,1090,1230,1580,1860],'60610':[2370,2540,2870,3680,4330],'60611':[2770,2960,3340,4300,5050],'60612':[1020,1090,1230,1580,1860],'60613':[1990,2120,2400,3080,3620],'60614':[2420,2590,2920,3760,4410],'60615':[1240,1330,1500,1920,2260],'60616':[1570,1680,1890,2430,2860],'60617':[1020,1090,1230,1580,1860],'60618':[1530,1640,1850,2370,2780],'60619':[1020,1090,1230,1580,1860],'60620':[910,980,1100,1420,1670],'60621':[890,960,1070,1380,1620],'60622':[1990,2120,2400,3080,3620],'60623':[920,990,1110,1430,1680],'60624':[920,990,1110,1430,1680],'60625':[1530,1640,1850,2370,2780],'60626':[1480,1580,1790,2290,2700],'60628':[910,980,1100,1420,1670],'60629':[920,990,1110,1430,1680],'60630':[1340,1430,1610,2070,2430],'60631':[1400,1500,1690,2170,2550],'60632':[920,990,1110,1430,1680],'60633':[970,1030,1170,1500,1760],'60634':[1200,1290,1450,1870,2190],'60636':[890,960,1070,1380,1620],'60637':[1170,1250,1400,1800,2110],'60638':[990,1060,1200,1540,1810],'60639':[920,990,1110,1430,1680],'60640':[1690,1800,2040,2620,3080],'60641':[1200,1290,1450,1870,2190],'60642':[2080,2230,2520,3230,3800],'60643':[1120,1190,1350,1730,2030],'60644':[920,990,1110,1430,1680],'60645':[1520,1630,1840,2360,2770],'60646':[1480,1580,1790,2290,2700],'60647':[1840,1960,2220,2850,3360],'60649':[1020,1090,1230,1580,1860],'60651':[920,990,1110,1430,1680],'60652':[920,990,1110,1430,1680],'60653':[1180,1260,1420,1830,2150],'60654':[2420,2590,2920,3760,4410],'60655':[1170,1250,1400,1800,2110],'60656':[1250,1340,1510,1940,2280],'60657':[2160,2310,2600,3340,3930],'60659':[1480,1580,1790,2290,2700],'60660':[1570,1680,1890,2430,2860],'60661':[2160,2310,2600,3340,3930],'60004':[1920,2050,2320,2980,3490],'60016':[1610,1730,1950,2510,2950],'60056':[1650,1760,1990,2550,2990],'60076':[1680,1790,2030,2600,3060],'60077':[1580,1690,1910,2450,2890],'60091':[2230,2380,2690,3450,4060],'60201':[2080,2230,2520,3230,3800],'60202':[1860,1990,2240,2880,3380],'60203':[2180,2330,2630,3390,3980],'60025':[1830,1950,2210,2840,3330],'60104':[1310,1400,1580,2030,2390],'60130':[1460,1550,1750,2250,2640],'60153':[1310,1390,1570,2020,2370],'60155':[1230,1320,1490,1910,2240]};
 
 const NHCLUSTERS=[
   {name:'Far South Side',zips:['60620','60628','60633','60643','60655'],color:'#7A4F1A'},
@@ -508,24 +515,63 @@ const ADU={
 };
 
 const SC={cash:'#2D5A27',grant:'#C4922A',loan:'#1A3A5A',soft:'#4A8F42',hard:'#185FA5',cont:'#7A4F1A',util:'#BA7517',site:'#993C1D'};
-const AMI4=115700,HHF=[0.70,0.80,0.90,1.00];
-let finTab='cash',grantAmt=40000,amiTab='forward',currentFMR=null,mktRentByBed={};
+// City of Chicago 2025 Income Limits (Chicago-Naperville-Joliet HUD Metro FMR Area)
+// Source: chicago.gov/content/dam/city/depts/doh/AMICharts/2025%20Income%20Limits.pdf
+// Effective April 1, 2025. 30%, 50%, 80% as published by HUD; others per HUD methodology.
+// AMI_BY_HH[householdSize][pctIndex] where pctIndex: 0=30%, 1=50%, 2=60%, 3=80%, 4=100%
+const AMI_BY_HH = {
+  1: [25200,  42000,  50400,  67150,  84000],
+  2: [28800,  48000,  57600,  76750,  96000],
+  3: [32400,  54000,  64800,  86350, 108000],
+  4: [35970,  59950,  71940,  95900, 119900],
+};
+const AMI_PCTS = [30, 50, 60, 80, 100];
+// Helper: income at a given AMI % for a given household size
+function amiIncome(hhSize, pct) {
+  const row = AMI_BY_HH[Math.min(hhSize, 4)];
+  // Interpolate for pcts not in the table
+  const idx = AMI_PCTS.indexOf(pct);
+  if (idx >= 0) return row[idx];
+  // Linear interp between nearest bracket
+  for (let i = 0; i < AMI_PCTS.length - 1; i++) {
+    if (pct > AMI_PCTS[i] && pct < AMI_PCTS[i+1]) {
+      const frac = (pct - AMI_PCTS[i]) / (AMI_PCTS[i+1] - AMI_PCTS[i]);
+      return Math.round(row[i] + frac * (row[i+1] - row[i]));
+    }
+  }
+  return row[4]; // fallback to 100%
+}
+// Max affordable monthly rent = 30% of monthly income at a given AMI level and household size
+function amiRent(hhSize, pct) {
+  return Math.round(amiIncome(hhSize, pct) * 0.30 / 12);
+}
+// Legacy compat — approximate 4-person 100% AMI for subsidy gap calcs
+const AMI4 = 119900;
+let finTab='cash',grantAmt=40000,amiTab='forward',currentFMR=null,mktRentZORI=null;
 
 function getHH(beds){return Math.min(parseInt(beds)+1,4)}
 function getBL(b){return['Studio','1-bedroom','2-bedroom','3-bedroom'][b]}
 
-// ===== RENTCAST LIVE FETCH =====
-function getRentcastKey(){return localStorage.getItem('rcKey')||''}
-function saveRentcastKey(){const k=document.getElementById('rentcastKey').value.trim();localStorage.setItem('rcKey',k);alert('Key saved. Re-enter a ZIP to load market data.');lookupZip();}
+// ===== ZILLOW ZORI VIA BRIDGE INTERACTIVE =====
+// ZORI = Zillow Observed Rent Index — typical market-rate rent, 40th–60th pct, repeat-rent method.
+// Available at ZIP level via Bridge Interactive API (bridgedataoutput.com).
+// Requires an approved Bridge Interactive API key (request at bridgeinteractive.com/developers/zillow-group-data/).
+// ZORI is not bedroom-stratified — it reflects the typical all-bedrooms rent for the ZIP.
+function getBridgeKey(){return localStorage.getItem('bridgeKey')||''}
+function saveBridgeKey(){const k=document.getElementById('bridgeKeyInput').value.trim();localStorage.setItem('bridgeKey',k);document.getElementById('bridgeKeySaved').textContent='Key saved.';lookupZip();}
 
-async function fetchRentcast(zip){
-  const key=getRentcastKey();
-  if(!key){return null;}
+async function fetchZORI(zip){
+  const key=getBridgeKey();
+  if(!key)return null;
   try{
-    const r=await fetch(`https://api.rentcast.io/v1/markets?zipCode=${zip}&propertyType=Apartment&bedrooms=0,1,2,3`,{headers:{'X-Api-Key':key}});
+    // Bridge Interactive Zillow Housing Market Metrics endpoint for ZORI by ZIP
+    const url=`https://api.bridgedataoutput.com/api/v2/zestimates/stats?access_token=${key}&postal_code=${zip}&fields=rentalZestimate`;
+    const r=await fetch(url,{headers:{'Accept':'application/json'}});
     if(!r.ok)return null;
     const d=await r.json();
-    return d;
+    // Response shape varies; attempt to extract ZORI/rental estimate
+    if(d&&d.bundle&&d.bundle[0]&&d.bundle[0].rentalZestimate)return Math.round(d.bundle[0].rentalZestimate);
+    return null;
   }catch(e){return null;}
 }
 
@@ -533,39 +579,29 @@ async function lookupZip(){
   const z=document.getElementById('zipInput').value.trim();
   const fEl=document.getElementById('fmrResult');
   const nEl=document.getElementById('rentSourceNote');
-  mktRentByBed={};
+  mktRentZORI=null;
   if(z.length!==5||!/^\d{5}$/.test(z)){fEl.innerHTML='<span class="fpil">Enter valid 5-digit ZIP</span>';currentFMR=null;calc();return;}
   if(SAFMR[z]){
     currentFMR=SAFMR[z];
     const beds=parseInt(document.getElementById('bedrooms').value);
     const fv=currentFMR[beds];
     let pillsHtml=`<span class="fpil">Studio $${currentFMR[0].toLocaleString()}</span><span class="fpil">1BR $${currentFMR[1].toLocaleString()}</span><span class="fpil">2BR $${currentFMR[2].toLocaleString()}</span><span class="fpil">3BR $${currentFMR[3].toLocaleString()}</span>`;
-    fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">Loading market data…</span>';
+    fEl.innerHTML=pillsHtml+(getBridgeKey()?'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">Loading ZORI…</span>':'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">Add Bridge API key for ZORI</span>');
     document.getElementById('rent').value=fv;
     document.getElementById('rentDisp').textContent='$'+fv.toLocaleString();
-    nEl.innerHTML=`<strong>HUD FY2025 SAFMR for ZIP ${z}:</strong> ${getBL(beds)} FMR = $${fv.toLocaleString()}/mo (40th-percentile gross rent). Loading Rentcast market median…`;
+    nEl.innerHTML=`<strong>HUD FY2026 SAFMR for ZIP ${z} (est.):</strong> ${getBL(beds)} FMR = $${fv.toLocaleString()}/mo (40th-pct gross rent incl. utilities).${getBridgeKey()?' Loading Zillow ZORI…':''}`;
     nEl.style.color='var(--gd)';
-    // Try Rentcast
-    const mkt=await fetchRentcast(z);
-    if(mkt&&mkt.rentalData){
-      const rd=mkt.rentalData;
-      // map bed counts
-      [0,1,2,3].forEach(b=>{
-        const key=b===0?'studio':(b+'Bedroom');
-        if(rd[key]&&rd[key].averageRent)mktRentByBed[b]=Math.round(rd[key].averageRent);
-      });
-      const mktV=mktRentByBed[beds];
-      if(mktV){
-        pillsHtml+=`<span class="mktpil">Market median (Rentcast): $${mktV.toLocaleString()}/mo</span>`;
+    if(getBridgeKey()){
+      const zori=await fetchZORI(z);
+      if(zori){
+        mktRentZORI=zori;
+        pillsHtml+=`<span class="mktpil">Zillow ZORI: $${zori.toLocaleString()}/mo (all bedrooms)</span>`;
         fEl.innerHTML=pillsHtml;
-        nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (40th-pct gross rent) · <strong>Rentcast market median: $${mktV.toLocaleString()}/mo</strong> (active listings). Adjust the rent slider to model your specific scenario.`;
+        nEl.innerHTML=`<strong>HUD FY2026 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (est., gross incl. utilities) · <strong>Zillow ZORI: $${zori.toLocaleString()}/mo</strong> (typical market rent, all bedroom sizes). Adjust the slider to model your scenario.`;
       }else{
-        fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">No Rentcast data for this ZIP</span>';
-        nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo.</strong> No Rentcast data for this ZIP. Add a Rentcast API key in the Assumptions tab for live market data.`;
+        fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">ZORI unavailable for this ZIP</span>';
+        nEl.innerHTML=`<strong>HUD FY2026 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (est.). Zillow ZORI not available for this ZIP.`;
       }
-    }else{
-      fEl.innerHTML=pillsHtml+'<span class="fpil" style="background:var(--sf2);border-color:var(--bd);color:var(--tx3)">'+(getRentcastKey()?'Rentcast error':'Add API key for market data')+'</span>';
-      nEl.innerHTML=`<strong>HUD FY2025 SAFMR (${getBL(beds)}): $${fv.toLocaleString()}/mo</strong> (40th-pct gross rent). ${getRentcastKey()?'Rentcast API error — check key.':'Enter a Rentcast API key in the Assumptions tab to load live market median rents.'}`;
     }
     nEl.style.color='var(--gd)';
   }else{
@@ -584,8 +620,7 @@ function onBedsChange(){
     const v=currentFMR[b];
     document.getElementById('rent').value=v;
     document.getElementById('rentDisp').textContent='$'+v.toLocaleString();
-    const mkt=mktRentByBed[b];
-    document.getElementById('rentSourceNote').innerHTML=`<strong>HUD SAFMR (${getBL(b)}): $${v.toLocaleString()}/mo</strong>`+(mkt?` · <strong>Rentcast median: $${mkt.toLocaleString()}/mo</strong>`:'');
+    document.getElementById('rentSourceNote').innerHTML=`<strong>HUD FY2026 SAFMR (${getBL(b)}): $${v.toLocaleString()}/mo</strong> (est.)`+(mktRentZORI?` · <strong>Zillow ZORI: $${mktRentZORI.toLocaleString()}/mo</strong> (all bedrooms, market rate)`:'');
     document.getElementById('rentSourceNote').style.color='var(--gd)';
   }
   calc();
@@ -596,10 +631,10 @@ function onRentSlide(){
   document.getElementById('rentDisp').textContent='$'+v.toLocaleString();
   if(currentFMR){
     const b=parseInt(document.getElementById('bedrooms').value);
-    const fmr=currentFMR[b],mkt=mktRentByBed[b];
+    const fmr=currentFMR[b];
     const fp=Math.round(v/fmr*100);
-    let s=`HUD SAFMR: <strong>$${fmr.toLocaleString()}/mo</strong> → your estimate is ${fp}% of FMR`;
-    if(mkt){const mp=Math.round(v/mkt*100);s+=` · Rentcast market median: <strong>$${mkt.toLocaleString()}/mo</strong> → ${mp}% of market`;}
+    let s=`HUD FY2026 SAFMR: <strong>$${fmr.toLocaleString()}/mo</strong> → your estimate is ${fp}% of FMR`;
+    if(mktRentZORI){const mp=Math.round(v/mktRentZORI*100);s+=` · Zillow ZORI: <strong>$${mktRentZORI.toLocaleString()}/mo</strong> → ${mp}% of market (all bedrooms)`;}
     document.getElementById('rentSourceNote').innerHTML=s;
     document.getElementById('rentSourceNote').style.color=fp>115?'var(--wa)':fp<85?'var(--ac)':'var(--gd)';
   }
@@ -621,7 +656,12 @@ function setFinTab(t,el){
   ['Cash','Heloc','Refi','Construction'].forEach(x=>document.getElementById('fp'+x).classList.toggle('gone',x.toLowerCase()!==t));
   calc();
 }
-function setGrant(a,el){grantAmt=a;document.querySelectorAll('.pil').forEach(p=>p.classList.remove('on'));el.classList.add('on');calc();}
+function onGrantSlide(){
+  grantAmt=parseInt(document.getElementById('grantSlider').value);
+  const d=document.getElementById('grantDisp');
+  d.textContent=grantAmt===0?'$0 (no grant)':'$'+grantAmt.toLocaleString();
+  calc();
+}
 function setAmiTab(t,el){
   amiTab=t;
   document.querySelectorAll('#amiTabs .tab').forEach(b=>b.classList.remove('on'));
@@ -642,7 +682,7 @@ function setMode(m){
     document.getElementById(x+'Mode').classList.toggle('gone',m!==x);
   });
   if(m==='policy')policyCalc();
-  if(m==='assumptions'&&getRentcastKey())document.getElementById('rentcastKey').value=getRentcastKey();
+  if(m==='assumptions'&&getBridgeKey())document.getElementById('bridgeKeyInput').value=getBridgeKey();
 }
 
 // ===== MASSING =====
@@ -774,15 +814,15 @@ function calc(){
   if(numAdus===2){
     const beds=parseInt(document.getElementById('bedrooms').value);
     const hh=getHH(beds);
-    const ami100=AMI4*HHF[hh-1];
-    const amiR60=Math.round(ami100*0.60*0.30/12);
+    const ami100=amiIncome(hh, 100);
+    const amiR60=amiRent(hh, 60);
     const t2=document.getElementById('aduType2').value;
     const s2=parseInt(document.getElementById('sqft2').value);
     const h2=s2*ADU[t2][fin]+site*0.5+util*0.5;
     const tc2=Math.round(h2*(1+softP)*(1+contP));
     const au=parseInt(document.getElementById('affordUnit').value);
     const mkt2=au===2?rent:amiR60,afd2=au===2?amiR60:rent;
-    document.getElementById('twoAduInfo').innerHTML=`60% AMI rent cap (${getBL(beds)}, ${hh}-person HH): <strong>$${amiR60.toLocaleString()}/mo.</strong> Unit ${au} must be rented at or below this. 30-year covenant recorded with Cook County Recorder (§2-44-106(i)). $500 registration fee (§2-44-065).`+(rent>amiR60?` Market rent ($${rent.toLocaleString()}) exceeds cap by $${(rent-amiR60).toLocaleString()}/mo.`:'');
+    document.getElementById('twoAduInfo').innerHTML=`60% AMI rent cap (${getBL(beds)}, ${hh}-person HH, City 2025 schedule): <strong>$${amiR60.toLocaleString()}/mo.</strong> Unit ${au} must be rented at or below this. 30-year covenant recorded with Cook County Recorder (§2-44-106(i)). $500 registration fee (§2-44-065).`+(rent>amiR60?` Market rent ($${rent.toLocaleString()}) exceeds cap by $${(rent-amiR60).toLocaleString()}/mo.`:'');
     const annBoth=(mkt2+afd2)*(1-vacP)*12;
     const annBothOp=annOp*1.5;
     const annBothCF=Math.round(annBoth-annBothOp-annDebt);
@@ -808,24 +848,24 @@ function calc(){
 function renderAMI(rent){
   const beds=parseInt(document.getElementById('bedrooms').value);
   const hh=getHH(beds);
-  const ami100=AMI4*HHF[hh-1];
+  const ami100=amiIncome(hh, 100);
   const pcts=[30,50,60,80,100,120];
   const cols=['#1D9E75','#2D5A27','#4A8F42','#BA7517','#E24B4A','#993C1D'];
   const hhlabel=hh+'-person household';
-  document.getElementById('amiRevDesc').textContent=`Rents affordable (30% rule) for a ${hhlabel} at each AMI level — Chicago Metro 2025:`;
+  document.getElementById('amiRevDesc').textContent=`Max affordable rents (30% of income) for a ${hhlabel} at each AMI level — City of Chicago 2025 income schedule:`;
   if(amiTab==='forward'){
-    const req=rent*12/0.30,pct=Math.round(req/ami100*100);
-    document.getElementById('amiFwdDesc').textContent=`At $${rent.toLocaleString()}/mo, a ${hhlabel} spending 30% of income needs ~$${Math.round(req).toLocaleString()}/yr — about ${pct}% of Chicago's ${hhlabel} AMI ($${Math.round(ami100).toLocaleString()}).`;
+    const req=rent*12/0.30,pct=Math.round(req/amiIncome(hh,100)*100);
+    document.getElementById('amiFwdDesc').textContent=`At $${rent.toLocaleString()}/mo, a ${hhlabel} spending 30% of income needs ~$${Math.round(req).toLocaleString()}/yr — about ${pct}% of Chicago's 2025 ${hhlabel} AMI ($${amiIncome(hh,100).toLocaleString()}, per City of Chicago DOH schedule).`;
     document.getElementById('amiForwardBars').innerHTML=pcts.map((p,i)=>{
-      const ar=Math.round(ami100*p/100*0.30/12),fits=rent<=ar,w=Math.min(100,Math.round(ar/4000*100));
+      const ar=amiRent(hh,p),fits=rent<=ar,w=Math.min(100,Math.round(ar/4000*100));
       return`<div class="amirow"><span class="amilbl">${p}% AMI</span><div class="amitrk"><div class="amifil" style="width:${w}%;background:${fits?cols[i]:'#D8D4CB'};color:${fits?'#fff':'#8A8078'}">${fits?'affordable':''}</div></div><span class="aminote">$${ar.toLocaleString()}/mo cap</span></div>`;
     }).join('');
-    const served=pcts.filter((p,i)=>rent<=Math.round(ami100*p/100*0.30/12));
+    const served=pcts.filter((p,i)=>rent<=amiRent(hh,p));
     const lowest=served.length>0?served[0]:null;
     document.getElementById('amiForwardNote').innerHTML=lowest?`This rent is affordable to ${hhlabel} households at <strong>${lowest}% AMI</strong> and above.${lowest<=60?' <strong>Satisfies Chicago\'s 60% AMI two-ADU mandate (§2-44-106).</strong>':lowest<=80?' Could qualify as affordable housing under standard program definitions.':''}`:`This rent exceeds the 30% affordability threshold for all AMI bands shown. It serves market-rate renters and would not satisfy the city's two-ADU affordability mandate.`;
   }else{
     document.getElementById('amiReverseBars').innerHTML=pcts.map((p,i)=>{
-      const ar=Math.round(ami100*p/100*0.30/12),w=Math.min(100,Math.round(ar/4000*100)),fits=rent<=ar;
+      const ar=amiRent(hh,p),w=Math.min(100,Math.round(ar/4000*100)),fits=rent<=ar;
       return`<div class="amirow"><span class="amilbl">${p}% AMI</span><div class="amitrk"><div class="amifil" style="width:${w}%;background:${cols[i]};color:#fff">$${ar.toLocaleString()}/mo</div></div><span class="aminote" style="color:${fits?'var(--ac)':'var(--tx3)'}">${fits?'✓ fits':''}</span></div>`;
     }).join('');
   }
@@ -847,105 +887,114 @@ function policyCalc(){
 
   const typCost=Math.round((sqft*ADU[type][fin]+18000)*1.12*1.05);
   const units=Math.round(props*adoptP);
-  // Grant budget determines how many units receive grants
   const grantBudget=budgetM*1e6;
   const grantedUnits=Math.min(units,Math.floor(grantBudget/grantSize));
   const totalInvest=Math.round(units*typCost/1e6);
 
-  // Subsidy gap: for a 1BR unit, what grant is needed so that AMI rent yields target ROI?
-  // Operating costs assumption: $7,200/yr (maintenance+insurance+tax), 7% vacancy
-  const annOp=7200,vacP=0.07;
-  const ami2=AMI4*HHF[1];// 2-person HH for 1BR
-  const pcts=[30,50,60,80];
-  // For each AMI level, compute the gap between market-rate and AMI rent, then the NPV of that income gap (simple: annualize over 20yr, discount not applied here — straightforward shortfall)
-  // Subsidy needed = totalCost - (PV of net income at AMI rent that gives roiP return)
-  // Simplified: grant = typCost - (AMI_rent*(1-vacP)*12 - annOp) / roiP
-  // (i.e., what lump sum makes the annualized return on REMAINING investment = roiP)
+  // Two-ADU mandated affordable units: ~15% of built units are second ADUs on same property
+  const twoAduUnits=Math.round(units*0.15);
+  const mandatedAffordUnits=Math.floor(twoAduUnits*0.5);
 
-  // Gap per neighborhood cluster for 1BR
+  const annOp=7200,vacP=0.07;
+  // ami2 helper: income for 2-person HH at given pct
+  const pcts=[30,50,60,80];
+
+  const gapData=pcts.map(p=>{
+    const amiRentVal=amiRent(2,p);
+    const annNetAtAmi=(amiRentVal*(1-vacP)*12)-annOp;
+    const supportedInv=annNetAtAmi>0?Math.round(annNetAtAmi/roiP):0;
+    const rawGap=Math.max(0,typCost-supportedInv);
+    const remainingGap=Math.max(0,rawGap-grantSize);
+    const unitsGrantCanMake=rawGap>0?Math.min(grantedUnits,Math.floor(grantBudget/rawGap)):grantedUnits;
+    return{p,amiRentVal,rawGap,remainingGap,supportedInv,unitsGrantCanMake};
+  });
+
+  const targetP=Math.round(targetAmiP*100);
+  const targetRow=gapData.find(d=>d.p===targetP)||gapData[2];
+  const subsidizedAfdUnits=targetRow.unitsGrantCanMake;
+  const totalAfdUnits=subsidizedAfdUnits+mandatedAffordUnits;
+
   const barData=NHCLUSTERS.map(nh=>({name:nh.name,fmr:nhAvgFmr(nh,1),color:nh.color})).filter(b=>b.fmr>0).sort((a,b)=>b.fmr-a.fmr);
   const maxFmr=barData[0].fmr;
 
   document.getElementById('policyMets').innerHTML=`
     <div class="met"><div class="ml">Units built (all)</div><div class="mv pos">${units.toLocaleString()}</div><div class="ms">${(adoptP*100).toFixed(0)}% of eligible properties</div></div>
-    <div class="met"><div class="ml">Typical unit cost</div><div class="mv">$${typCost.toLocaleString()}</div><div class="ms">${sqft} sq ft · ${fin} · incl. contingency</div></div>
-    <div class="met"><div class="ml">Total private investment</div><div class="mv">$${totalInvest}M</div><div class="ms">est. capital deployed</div></div>
-    <div class="met"><div class="ml">Grant budget</div><div class="mv">$${budgetM}M</div><div class="ms">$${grantSize.toLocaleString()}/unit avg grant</div></div>
-    <div class="met"><div class="ml">Units receiving grants</div><div class="mv warn">${grantedUnits.toLocaleString()}</div><div class="ms">budget ÷ grant size</div></div>
-    <div class="met"><div class="ml">Target AMI level</div><div class="mv">${Math.round(targetAmiP*100)}%</div><div class="ms">affordability target for grant-linked units</div></div>`;
+    <div class="met"><div class="ml">Units receiving grants</div><div class="mv warn">${grantedUnits.toLocaleString()}</div><div class="ms">$${budgetM}M ÷ $${grantSize.toLocaleString()}/unit</div></div>
+    <div class="met"><div class="ml">Grant-subsidized affordable</div><div class="mv warn">${subsidizedAfdUnits.toLocaleString()}</div><div class="ms">at ${targetP}% AMI, gap closed by grant</div></div>
+    <div class="met"><div class="ml">Mandated affordable (2-ADU rule)</div><div class="mv warn">${mandatedAffordUnits.toLocaleString()}</div><div class="ms">est. ~15% built as paired 2-ADU properties</div></div>
+    <div class="met"><div class="ml">Total affordable units</div><div class="mv pos">${totalAfdUnits.toLocaleString()}</div><div class="ms">subsidized + mandated at ${targetP}% AMI</div></div>
+    <div class="met"><div class="ml">Total private investment</div><div class="mv">$${totalInvest}M</div><div class="ms">est. capital deployed</div></div>`;
 
   document.getElementById('polBarChart').innerHTML=barData.map(b=>{
     const w=Math.round(b.fmr/maxFmr*100);
-    const ami60=Math.round(ami2*0.60*0.30/12);
-    const amiPct=Math.round(b.fmr*12/0.30/ami2*100);
+    const ami60=amiRent(2,60);
+    const amiPct=Math.round(b.fmr*12/0.30/amiIncome(2,100)*100);
     return`<div class="bar-row"><span class="bar-lbl">${b.name}</span><div class="bar-trk"><div class="bar-fil" style="width:${w}%;background:${b.color}"><span>$${b.fmr.toLocaleString()}</span></div></div><span class="bar-val" style="color:${b.fmr<=ami60?'var(--ac)':'var(--tx3)'}">${amiPct}% AMI</span></div>`;
   }).join('');
 
-  // Subsidy gap chart — for each AMI level, how big a grant is needed at avg Chicago market cost?
-  // Formula: grantNeeded = typCost - [(amiRent*(1-vacP)*12 - annOp) / roiP]
-  // Capped at 0 (if AMI rent already yields target ROI no grant needed)
-  document.getElementById('subGapDesc').textContent=`For a typical ${sqft} sq ft ADU costing ~$${typCost.toLocaleString()}, how large a per-unit grant is needed so that a homeowner receiving the grant can rent at each AMI level and still earn a ${(roiP*100).toFixed(0)}% annual return on their remaining investment?`;
+  document.getElementById('subGapDesc').textContent=`For a typical ${sqft} sq ft ADU costing ~$${typCost.toLocaleString()}, the green portion of each bar shows the subsidy gap covered by the $${grantSize.toLocaleString()} grant. Any red portion is the remaining gap still unfunded. Owner target ROI: ${(roiP*100).toFixed(0)}%.`;
 
-  const gapData=pcts.map(p=>{
-    const amiRent=Math.round(ami2*p/100*0.30/12);
-    const annNetAtAmi=(amiRent*(1-vacP)*12)-annOp;
-    // Investment that annNetAtAmi supports at roiP return
-    const supportedInvestment=annNetAtAmi>0?Math.round(annNetAtAmi/roiP):0;
-    const gapNeeded=Math.max(0,typCost-supportedInvestment);
-    return{p,amiRent,gapNeeded,supportedInvestment};
-  });
-
-  const maxGap=Math.max(...gapData.map(d=>d.gapNeeded),1);
+  const maxGap=Math.max(...gapData.map(d=>d.rawGap),grantSize,1);
   document.getElementById('subGapChart').innerHTML=gapData.map(d=>{
-    const w=Math.round(d.gapNeeded/maxGap*100);
-    const feasible=d.gapNeeded<=grantSize;
-    const grantCovers=Math.min(100,Math.round(grantSize/Math.max(d.gapNeeded,1)*100));
-    return`<div class="sgap-row">
-      <span class="sgap-lbl">${d.p}% AMI</span>
-      <div class="sgap-bar-wrap">
-        <div class="sgap-bar" style="width:${w}%;background:${feasible?'var(--ac)':'var(--da)'}">$${Math.round(d.gapNeeded/1000)}k gap</div>
-        ${d.gapNeeded>0?`<div style="position:absolute;top:0;left:${Math.round(grantSize/maxGap*100)}%;height:100%;width:2px;background:var(--gd);opacity:.8" title="Your grant size: $${grantSize.toLocaleString()}"></div>`:''}
+    const noGap=d.rawGap===0;
+    const grantCoversAll=!noGap&&d.remainingGap===0;
+    return`<div style="margin-bottom:.9rem">
+      <div class="sgap-row">
+        <span class="sgap-lbl">${d.p}% AMI</span>
+        <div class="sgap-bar-wrap">
+          ${noGap
+            ?`<div class="sgap-bar" style="width:100%;background:var(--ac)">No gap — profitable w/o subsidy</div>`
+            :`<div style="display:flex;height:26px;border-radius:4px;overflow:hidden;width:${Math.round(d.rawGap/maxGap*100)}%;min-width:60px">
+                <div style="width:${Math.round(Math.min(grantSize,d.rawGap)/d.rawGap*100)}%;background:var(--ac);display:flex;align-items:center;padding-left:6px;font-size:11px;font-family:'DM Mono',monospace;color:#fff;flex-shrink:0;min-width:4px"></div>
+                ${d.remainingGap>0?`<div style="flex:1;background:var(--da);display:flex;align-items:center;padding-left:5px;font-size:11px;font-family:'DM Mono',monospace;color:#fff;min-width:4px"></div>`:""}
+              </div>`
+          }
+        </div>
+        <span class="sgap-note" style="color:${noGap?'var(--ac)':grantCoversAll?'var(--ac)':'var(--da)'}">
+          ${noGap?'✓ no subsidy needed':grantCoversAll?'✓ gap closed':'$'+Math.round(d.remainingGap/1000)+'k still needed'}
+        </span>
       </div>
-      <span class="sgap-note" style="color:${feasible?'var(--ac)':'var(--da)'}">${feasible?'✓ grant covers gap':'gap: $'+Math.round(d.gapNeeded/1000)+'k over budget'}</span>
-    </div>
-    <div style="font-size:11px;font-family:\'DM Mono\',monospace;color:var(--tx3);margin-bottom:.5rem;padding-left:79px">AMI rent: $${d.amiRent.toLocaleString()}/mo · supports $${d.supportedInvestment.toLocaleString()} investment at ${(roiP*100).toFixed(0)}% ROI target</div>`;
+      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx3);margin-top:3px;padding-left:79px">
+        AMI rent: $${d.amiRentVal.toLocaleString()}/mo · total gap: ${noGap?"$0":"$"+d.rawGap.toLocaleString()} · grant covers: $${Math.min(grantSize,d.rawGap).toLocaleString()} · remaining: $${d.remainingGap.toLocaleString()}
+      </div>
+    </div>`;
   }).join('');
 
-  // Grant outcome panel — how many affordable units does the grant budget actually produce?
-  const afdByAmi=gapData.map(d=>{
-    const unitsGrantCanMake=d.gapNeeded>0?Math.min(grantedUnits,Math.floor(grantBudget/d.gapNeeded)):grantedUnits;
-    return{p:d.p,units:unitsGrantCanMake,gap:d.gapNeeded};
-  });
   document.getElementById('grantOutcomePanel').innerHTML=`
-    <p style="font-size:13px;color:var(--tx2);margin-bottom:.75rem">With a $${budgetM}M grant program at $${grantSize.toLocaleString()} per unit, <strong>${grantedUnits.toLocaleString()} units</strong> receive grants. Of those, here is how many can be made affordable at each AMI level (i.e., where the grant fully closes the subsidy gap so the owner earns ≥${(roiP*100).toFixed(0)}% ROI at the AMI rent):</p>
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:.75rem">With a $${budgetM}M program at $${grantSize.toLocaleString()}/unit, <strong>${grantedUnits.toLocaleString()} units receive grants</strong>. The table shows how many of those grants fully close the subsidy gap at each AMI level (so the owner earns ≥${(roiP*100).toFixed(0)}% ROI at the AMI rent). Add <strong>${mandatedAffordUnits.toLocaleString()} mandated units</strong> (from the 2-ADU ordinance rule) for total affordable production.</p>
     <table class="at">
-      <thead><tr><th>Target AMI</th><th>AMI rent cap (1BR, 2-person HH)</th><th>Subsidy gap / unit</th><th>Units grant budget can make affordable</th><th>Status at $${grantSize.toLocaleString()} grant</th></tr></thead>
-      <tbody>${afdByAmi.map(d=>`<tr>
-        <td>${d.p}% AMI</td>
-        <td>$${Math.round(ami2*d.p/100*0.30/12).toLocaleString()}/mo</td>
-        <td>${d.gap>0?'$'+d.gap.toLocaleString():'No gap — profitable at AMI rent'}</td>
-        <td>${d.gap>0?d.units.toLocaleString():'All '+grantedUnits.toLocaleString()+' (no subsidy needed)'}</td>
-        <td style="color:${d.gap<=grantSize?'var(--ac)':'var(--da)'}">${d.gap<=grantSize?'✓ grant size sufficient':'Grant too small by $'+Math.round((d.gap-grantSize)/1000)+'k/unit'}</td>
-      </tr>`).join('')}</tbody>
+      <thead><tr><th>AMI level</th><th>AMI rent cap (1BR, 2-person HH)</th><th>Total subsidy gap / unit</th><th>Remaining gap after $${grantSize.toLocaleString()} grant</th><th>Units made affordable</th><th>Grant adequacy</th></tr></thead>
+      <tbody>${gapData.map(d=>{
+        const noGap=d.rawGap===0;
+        const covered=d.remainingGap===0||noGap;
+        return`<tr>
+          <td>${d.p}% AMI</td>
+          <td>$${d.amiRentVal.toLocaleString()}/mo</td>
+          <td>${noGap?'No additional subsidies needed':'$'+d.rawGap.toLocaleString()}</td>
+          <td>${covered?'No additional subsidies needed':'$'+d.remainingGap.toLocaleString()+' still needed'}</td>
+          <td>${noGap?'All '+grantedUnits.toLocaleString()+' (no additional subsidies needed)':d.unitsGrantCanMake.toLocaleString()}</td>
+          <td style="color:${covered?'var(--ac)':'var(--da)'}">${covered?'✓ sufficient':'Increase by $'+Math.round(d.remainingGap/1000)+'k/unit'}</td>
+        </tr>`;
+      }).join('')}</tbody>
     </table>`;
 
-  document.getElementById('subGapNote').innerHTML=`The gold line on each bar shows your $${grantSize.toLocaleString()} grant size. Bars shorter than the line can be made affordable with that grant. Longer bars require a larger per-unit subsidy. Assumptions: ${sqft} sq ft unit, $${typCost.toLocaleString()} total cost, ${(roiP*100).toFixed(0)}% target ROI, 7% vacancy, $7,200/yr operating costs (maintenance, insurance, property tax), 2-person household size for 1BR unit. Adjust the ROI target slider — lower ROI expectations dramatically reduce the subsidy gap needed. <a href="https://www.chicago.gov/areamedianincome" target="_blank">Chicago AMI chart →</a>`;
+  document.getElementById('subGapNote').innerHTML=`Green bar = portion of gap covered by $${grantSize.toLocaleString()} grant. Red bar = remaining gap. Assumptions: ${sqft} sq ft, $${typCost.toLocaleString()} total cost, ${(roiP*100).toFixed(0)}% target ROI, 7% vacancy, $7,200/yr operating costs, 2-person HH for 1BR. Mandated affordable units (${mandatedAffordUnits.toLocaleString()}) arise from the 2-ADU ordinance requirement (§2-44-106(d)) at no additional program cost — they are separate from grant-subsidized units. <a href="https://www.chicago.gov/areamedianincome" target="_blank">Chicago AMI chart →</a>`;
 
-  // AMI table
-  const ami2v=AMI4*HHF[1];
+  
   document.getElementById('polAmiTable').innerHTML=`<table class="at">
     <thead><tr><th>AMI %</th><th>Annual income (2-person HH)</th><th>Max affordable rent (30% rule)</th><th>Neighborhood clusters at or below (1-BR SAFMR)</th></tr></thead>
     <tbody>${[30,50,60,80,100].map(p=>{
-      const annI=Math.round(ami2v*p/100),maxR=Math.round(annI*0.30/12);
+      const annI=amiIncome(2,p),maxR=amiRent(2,p);
       const nhC=NHCLUSTERS.filter(nh=>nhAvgFmr(nh,1)<=maxR).length;
       return`<tr><td>${p}%</td><td>$${annI.toLocaleString()}</td><td>$${maxR.toLocaleString()}/mo</td><td style="color:${nhC>0?'var(--ac)':'var(--tx3)'}">${nhC} of ${NHCLUSTERS.length}</td></tr>`;
     }).join('')}</tbody></table>`;
 }
 
 window.addEventListener('load',()=>{
+  grantAmt=parseInt(document.getElementById('grantSlider').value);
   updateMassing();
   calc();
-  if(getRentcastKey())document.getElementById('rentcastKey').value=getRentcastKey();
+  if(getBridgeKey())document.getElementById('bridgeKeyInput').value=getBridgeKey();
 });
 </script>
 </body>
